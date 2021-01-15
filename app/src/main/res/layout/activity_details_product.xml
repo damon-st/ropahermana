@@ -61,81 +61,150 @@
                     />
             </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="Titulo"
-                android:textAlignment="center"
-                android:textSize="18sp"
-                android:gravity="center_horizontal"
-                android:id="@+id/titulo"
-                android:fontFamily="@font/ubuntu_bold"
-                android:textColor="@android:color/black"
-                />
+           <ScrollView
+               android:layout_width="match_parent"
+               android:layout_height="match_parent"
+               android:scrollbars="vertical">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="Titulo"
-                android:textAlignment="textStart"
-                android:textSize="18sp"
-                android:gravity="center_horizontal"
-                android:id="@+id/precio"
-                tools:ignore="RtlCompat"
-                android:textColor="@android:color/black"
-                android:fontFamily="@font/ubuntu_medium"
-                />
+               <LinearLayout
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:orientation="vertical">
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:fontFamily="@font/ubuntu_bold"
+                           android:textSize="18sp"
+                           android:text="Categoria: "
+                           android:layout_weight="1"
+                           android:textColor="@color/colorPrimaryDark"
+                           />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:text="Titulo"
-                android:textAlignment="textStart"
-                android:textSize="18sp"
-                android:gravity="center_horizontal"
-                android:id="@+id/description"
-                tools:ignore="RtlCompat"
-                android:textColor="@android:color/black"
-                android:fontFamily="@font/ubuntu_medium"
-                />
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:text="Titulo"
+                           android:textAlignment="center"
+                           android:textSize="18sp"
+                           android:gravity="center_horizontal"
+                           android:id="@+id/titulo"
+                           android:fontFamily="@font/ubuntu_bold"
+                           android:textColor="@android:color/black"
+
+                           android:layout_weight="1"
+                           />
+                   </LinearLayout>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:text="Precio: "
+                           android:textAlignment="textStart"
+                           android:textSize="18sp"
+                           android:gravity="center_horizontal"
+                           tools:ignore="RtlCompat"
+                           android:textColor="@color/colorPrimaryDark"
+                           android:fontFamily="@font/ubuntu_medium"
+                           android:layout_weight="1"
+                           />
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:text="Titulo"
+                           android:textAlignment="center"
+                           android:textSize="18sp"
+                           android:gravity="center_horizontal"
+                           android:id="@+id/precio"
+                           tools:ignore="RtlCompat"
+                           android:textColor="@android:color/black"
+                           android:fontFamily="@font/ubuntu_medium"
+                           android:layout_weight="1"
+                           />
+                   </LinearLayout>
+
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:text="Descripcion"
+                           android:textAlignment="textStart"
+                           android:textSize="18sp"
+                           android:gravity="center_horizontal"
+                           tools:ignore="RtlCompat"
+                           android:textColor="@color/colorPrimaryDark"
+                           android:fontFamily="@font/ubuntu_medium"
+                           android:layout_weight="1"
+                           />
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:text="Titulo"
+                           android:textAlignment="center"
+                           android:textSize="18sp"
+                           android:gravity="center_horizontal"
+                           android:id="@+id/description"
+                           tools:ignore="RtlCompat"
+                           android:textColor="@android:color/black"
+                           android:fontFamily="@font/ubuntu_medium"
+                           android:layout_weight="1"
+                           />
+                   </LinearLayout>
 
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/colorPrimaryDark"
-                android:text="Contactanos"
-                android:textSize="20sp"
-                android:textAlignment="center"
-                android:fontFamily="@font/ubuntu_bold"
-                android:gravity="center_horizontal" />
+                   <TextView
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:textColor="@color/colorPrimaryDark"
+                       android:text="Contactanos atraves de "
+                       android:textSize="20sp"
+                       android:textAlignment="center"
+                       android:fontFamily="@font/ubuntu_bold"
+                       android:gravity="center_horizontal" />
 
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
 
-                <ImageView
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:src="@drawable/w"
-                    android:layout_marginStart="100dp"
-                    android:layout_marginLeft="100dp" />
-                <ImageView
-                    android:layout_marginStart="100dp"
-                    android:layout_width="55dp"
-                    android:layout_height="55dp"
-                    android:src="@drawable/i"
-                    android:scaleType="centerCrop"
-                    android:background="@android:color/white"
-                    android:layout_marginLeft="100dp" />
+                       <ImageView
+                           android:layout_width="55dp"
+                           android:layout_height="55dp"
+                           android:src="@drawable/w"
+                           android:layout_marginStart="100dp"
+                           android:layout_marginLeft="100dp" />
+                       <ImageView
+                           android:layout_marginStart="100dp"
+                           android:layout_width="55dp"
+                           android:layout_height="55dp"
+                           android:src="@drawable/i"
+                           android:scaleType="centerCrop"
+                           android:background="@android:color/white"
+                           android:layout_marginLeft="100dp" />
 
 
-            </LinearLayout>
+                   </LinearLayout>
+
+               </LinearLayout>
+
+           </ScrollView>
 
 
         </LinearLayout>

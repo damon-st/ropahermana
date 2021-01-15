@@ -4,14 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Application;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
 import android.view.View;
 
 import com.damon.ropa.R;
+import com.damon.ropa.app.RopaAplication;
 import com.damon.ropa.fragments.ProductGridFragment;
 import com.damon.ropa.interfaces.NavigationHost;
+import com.google.firebase.FirebaseApp;
 
 public class MainActivity extends AppCompatActivity implements NavigationHost {
 
@@ -19,15 +22,18 @@ public class MainActivity extends AppCompatActivity implements NavigationHost {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        FirebaseApp.initializeApp(RopaAplication.getAppContext());
 
-//        if (savedInstanceState == null){
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .add(R.id.container,new LoginFragement())
-//                    .commit();
-//        }
+        if (savedInstanceState == null){
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .add(R.id.container,new ProductGridFragment())
+                    .commit();
+        }else {
+            navigateTo(new ProductGridFragment(),false);
+        }
 
-        navigateTo(new ProductGridFragment(),false);
+      //  navigateTo(new ProductGridFragment(),false);
 
 //        Fade fade = null;
 //        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {

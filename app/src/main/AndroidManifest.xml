@@ -5,7 +5,11 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
     <application
+        android:requestLegacyExternalStorage="true"
         android:name=".app.RopaAplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -13,18 +17,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Shrine">
-        <activity android:name=".activitys.DetailsProduct"
+        <activity android:name=".activitys.RegisterActivity"
             android:screenOrientation="portrait"
             ></activity>
-        <activity android:name=".activitys.MainActivity"
+        <activity android:name=".activitys.CreateActivity"
             android:screenOrientation="portrait"
-            >
+            />
+        <activity android:name=".activitys.LoginActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".activitys.DetailsProduct"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activitys.MainActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
+        android:theme="@style/Base.Theme.AppCompat"/>
     </application>
 
 </manifest>

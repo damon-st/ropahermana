@@ -9,17 +9,49 @@ public class ProductEntry implements Serializable {
     public  String url;
     public  double price;
     public  String description;
-    public int id;
+    private int cantidad;
+    public String id;
+    private String marca;
+
+    private String category;
 
     public ProductEntry() {
     }
 
-    public ProductEntry(String title, String url, double price, String description, int id) {
+
+    public ProductEntry(String title, String url, double price, String description, int cantidad, String id, String marca, String category) {
         this.title = title;
         this.url = url;
         this.price = price;
         this.description = description;
+        this.cantidad = cantidad;
         this.id = id;
+        this.marca = marca;
+        this.category = category;
+    }
+
+    public String getMarca() {
+        return marca;
+    }
+
+    public void setMarca(String marca) {
+        this.marca = marca;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public int getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
     }
 
     public void setTitle(String title) {
@@ -38,12 +70,12 @@ public class ProductEntry implements Serializable {
         this.description = description;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public String getId() {
+        return id;
     }
 
-    public int getId() {
-        return id;
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getTitle() {

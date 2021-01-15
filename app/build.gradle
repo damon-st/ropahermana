@@ -13,7 +13,7 @@ android {
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        multiDexEnabled true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -28,6 +28,9 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 }
+
+def lottieVersion = "3.4.0"
+def multidex_version = "2.0.1"
 
 dependencies {
 
@@ -50,4 +53,18 @@ dependencies {
     implementation 'com.firebaseui:firebase-ui-database:4.3.2'
     implementation 'com.google.firebase:firebase-core:18.0.0'
 //    implementation 'com.google.firebase:firebase-firestore:21.4.3'
+
+    api 'com.theartofdev.edmodo:android-image-cropper:2.8.+'
+    implementation  'androidx.recyclerview:recyclerview:1.1.0'
+    //Scalable Size unit(support for different screen sizes)
+    implementation 'com.intuit.sdp:sdp-android:1.0.6'
+    implementation 'com.intuit.ssp:ssp-android:1.0.6'
+
+    implementation 'id.zelory:compressor:2.1.0'//libreria de comprecion
+
+    // libreria de aniamciones para mostrar nomas como gif
+    implementation "com.airbnb.android:lottie:$lottieVersion"
+
+
+    implementation "androidx.multidex:multidex:$multidex_version"
 }

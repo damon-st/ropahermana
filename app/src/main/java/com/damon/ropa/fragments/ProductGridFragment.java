@@ -4,6 +4,7 @@ import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -29,11 +30,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.damon.ropa.R;
+import com.damon.ropa.activitys.LoginActivity;
 import com.damon.ropa.adapters.StaggeredProductCardRecyclerViewAdapter;
 import com.damon.ropa.models.ProductEntry;
 import com.damon.ropa.utils.NavigationIconClickListener;
 import com.damon.ropa.utils.ProductGridItemDecoration;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,7 +49,7 @@ import java.util.List;
 public class ProductGridFragment extends Fragment {
 
     DatabaseReference reference;
-    MaterialButton btn_mujer,btn_hombre;
+    MaterialButton btn_mujer,btn_hombre,btn_cuenta;
     String typo = "Mujer";
     ArrayList<ProductEntry> productEntryArrayList;
     StaggeredProductCardRecyclerViewAdapter adapter;
@@ -79,7 +82,12 @@ public class ProductGridFragment extends Fragment {
         productEntryArrayList= new ArrayList<>();
         // Set up the RecyclerView
         RecyclerView recyclerView = view.findViewById(R.id.recycler_view);
-        recyclerView.setHasFixedSize(true);
+        try {
+            recyclerView.setHasFixedSize(true);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2, GridLayoutManager.HORIZONTAL, false);
         gridLayoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
@@ -101,6 +109,7 @@ public class ProductGridFragment extends Fragment {
             view.findViewById(R.id.product_grid).setBackground(getContext().getDrawable(R.drawable.shr_product_grid_background_shape));
         }
 
+        btn_cuenta = view.findViewById(R.id.cuenta);
         btn_mujer = view.findViewById(R.id.mujer);
         btn_hombre = view.findViewById(R.id.hombre);
         scrollView = view.findViewById(R.id.product_grid);
@@ -135,6 +144,13 @@ public class ProductGridFragment extends Fragment {
             }
         });
 
+        btn_cuenta.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                getActivity().startActivity(intent);
+            }
+        });
 
         return view;
     }
@@ -195,12 +211,16 @@ public class ProductGridFragment extends Fragment {
             activity.setSupportActionBar(toolbar);
         }
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeOrNoMenu();
-            }
-        });
+
+        if (toolbar != null){
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    closeOrNoMenu();
+                }
+            });
+        }
+
 
 //        toolbar.setNavigationOnClickListener(new NavigationIconClickListener(
 //                getContext(),
