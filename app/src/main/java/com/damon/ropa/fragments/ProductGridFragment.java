@@ -1,6 +1,10 @@
 package com.damon.ropa.fragments;
 
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -8,16 +12,20 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.Interpolator;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.damon.ropa.R;
@@ -42,6 +50,17 @@ public class ProductGridFragment extends Fragment {
     String typo = "Mujer";
     ArrayList<ProductEntry> productEntryArrayList;
     StaggeredProductCardRecyclerViewAdapter adapter;
+    private final AnimatorSet animatorSet = new AnimatorSet();
+
+    private int height;
+     int translateY;
+
+    private boolean backdropShown = false;
+    private Interpolator interpolator;
+    private NestedScrollView scrollView;
+    private Drawable openIcon;
+    private Drawable closeIcon;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -71,7 +90,7 @@ public class ProductGridFragment extends Fragment {
         reference = FirebaseDatabase.getInstance().getReference("Ropa");
         getProducsT(typo);
         recyclerView.setLayoutManager(gridLayoutManager);
-         adapter = new StaggeredProductCardRecyclerViewAdapter(productEntryArrayList);
+         adapter = new StaggeredProductCardRecyclerViewAdapter(productEntryArrayList,getActivity());
         recyclerView.setAdapter(adapter);
         int largePadding = getResources().getDimensionPixelSize(R.dimen.shr_staggered_product_grid_spacing_large);
         int smallPadding = getResources().getDimensionPixelSize(R.dimen.shr_staggered_product_grid_spacing_small);
@@ -84,18 +103,33 @@ public class ProductGridFragment extends Fragment {
 
         btn_mujer = view.findViewById(R.id.mujer);
         btn_hombre = view.findViewById(R.id.hombre);
+        scrollView = view.findViewById(R.id.product_grid);
+
+
+        closeIcon =  getContext().getResources().getDrawable(R.drawable.shr_close_menu);
+        openIcon =  getContext().getResources().getDrawable(R.drawable.shr_branded_menu);
+        interpolator = new AccelerateDecelerateInterpolator();
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height = displayMetrics.heightPixels;
+
+        translateY = height -
+                getContext().getResources().getDimensionPixelSize(R.dimen.shr_product_grid_reveal_height);
 
         btn_mujer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                closeOrNoMenu();
                 typo="Mujer";
                 getProducsT(typo);
+
             }
         });
 
         btn_hombre.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                closeOrNoMenu();
                 typo="Hombre";
                 getProducsT(typo);
             }
@@ -105,6 +139,23 @@ public class ProductGridFragment extends Fragment {
         return view;
     }
 
+
+     void   closeOrNoMenu(){
+        backdropShown = !backdropShown;
+        animatorSet.removeAllListeners();
+        animatorSet.end();
+        animatorSet.cancel();
+        updateIcon(toolbar);
+         ObjectAnimator animator = ObjectAnimator.ofFloat(scrollView
+                 , "translationY", backdropShown ? translateY : 0);
+
+         animator.setDuration(500);
+         if (interpolator != null) {
+             animator.setInterpolator(interpolator);
+         }
+         animatorSet.play(animator);
+         animator.start();
+    }
 
 
     void getProducsT(String  typo){
@@ -144,17 +195,38 @@ public class ProductGridFragment extends Fragment {
             activity.setSupportActionBar(toolbar);
         }
 
-        toolbar.setNavigationOnClickListener(new NavigationIconClickListener(
-                getContext(),
-                view.findViewById(R.id.product_grid),
-                new AccelerateDecelerateInterpolator(),
-                getContext().getResources().getDrawable(R.drawable.shr_branded_menu), // Menu open icon
-                getContext().getResources().getDrawable(R.drawable.shr_close_menu))); // Menu close icon
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                closeOrNoMenu();
+            }
+        });
+
+//        toolbar.setNavigationOnClickListener(new NavigationIconClickListener(
+//                getContext(),
+//                view.findViewById(R.id.product_grid),
+//                new AccelerateDecelerateInterpolator(),
+//                getContext().getResources().getDrawable(R.drawable.shr_branded_menu), // Menu open icon
+//                getContext().getResources().getDrawable(R.drawable.shr_close_menu))); // Menu close icon
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.shr_toolbar_menu, menu);
         super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+
+    private void updateIcon(Toolbar view) {
+        if (openIcon != null && closeIcon != null) {
+            if (!(view instanceof Toolbar)) {
+                throw new IllegalArgumentException("updateIcon() must be called on an ImageView");
+            }
+            if (backdropShown) {
+                ((Toolbar) view).setNavigationIcon(closeIcon);
+            } else {
+                ((Toolbar) view).setNavigationIcon(openIcon);
+            }
+        }
     }
 }

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activitys.DetailsProduct"
+    android:background="@color/colorAccent"
+    >
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:elevation="0dp"
+        android:id="@+id/bar"
+        android:background="@color/colorAccent"
+        >
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/app_bar_dos"
+            style="@style/Widget.Shrine.Toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:paddingStart="12dp"
+            android:paddingLeft="12dp"
+            android:paddingEnd="12dp"
+            android:paddingRight="12dp"
+            app:contentInsetStart="0dp"
+            app:navigationIcon="@drawable/shr_branded_menu"
+            app:title="@string/app_name" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/bar"
+        android:orientation="vertical"
+        android:background="@color/colorAccent"
+        android:elevation="8dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/shr_product_grid_background_shape"
+            >
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="18dp"
+                app:cardCornerRadius="15dp"
+                android:elevation="2dp"
+                >
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="400dp"
+                    android:id="@+id/image_product"
+                    android:transitionName="@string/transition"
+                    android:scaleType="centerCrop"
+                    />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Titulo"
+                android:textAlignment="center"
+                android:textSize="18sp"
+                android:gravity="center_horizontal"
+                android:id="@+id/titulo"
+                android:fontFamily="@font/ubuntu_bold"
+                android:textColor="@android:color/black"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Titulo"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                android:gravity="center_horizontal"
+                android:id="@+id/precio"
+                tools:ignore="RtlCompat"
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/ubuntu_medium"
+                />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:text="Titulo"
+                android:textAlignment="textStart"
+                android:textSize="18sp"
+                android:gravity="center_horizontal"
+                android:id="@+id/description"
+                tools:ignore="RtlCompat"
+                android:textColor="@android:color/black"
+                android:fontFamily="@font/ubuntu_medium"
+                />
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/colorPrimaryDark"
+                android:text="Contactanos"
+                android:textSize="20sp"
+                android:textAlignment="center"
+                android:fontFamily="@font/ubuntu_bold"
+                android:gravity="center_horizontal" />
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:src="@drawable/w"
+                    android:layout_marginStart="100dp"
+                    android:layout_marginLeft="100dp" />
+                <ImageView
+                    android:layout_marginStart="100dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
+                    android:src="@drawable/i"
+                    android:scaleType="centerCrop"
+                    android:background="@android:color/white"
+                    android:layout_marginLeft="100dp" />
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</RelativeLayout>
