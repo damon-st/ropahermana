@@ -71,4 +71,7 @@ dependencies {
     //glide par img
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
+
+    //libreria para ser zoom alas imagenes
+    implementation 'com.commit451:PhotoView:1.2.4'
 }

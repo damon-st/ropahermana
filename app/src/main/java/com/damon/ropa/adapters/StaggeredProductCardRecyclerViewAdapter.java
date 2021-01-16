@@ -61,7 +61,7 @@ public class StaggeredProductCardRecyclerViewAdapter extends RecyclerView.Adapte
             holder.productTitle.setText(product.title);
             holder.productPrice.setText("$"+product.price);
 
-            Picasso.get().load(product.url.get(position).getUrl()).resize(250,250).into(holder.productImage);
+            Picasso.get().load(product.getImgPortada()).resize(250,250).into(holder.productImage);
 
             holder.productImage.setOnClickListener(new View.OnClickListener() {
                 @Override

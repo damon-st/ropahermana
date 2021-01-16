@@ -55,6 +55,22 @@ public class CustomBottomSheet extends BottomSheetDialogFragment {
                     case R.id.pantalones:
                         selecion = "Palantalones";
                         break;
+                    case R.id.ninas:
+                        selecion = "Niña";
+                        break;
+
+                    case R.id.ninos:
+                        selecion = "Niño";
+                        break;
+                    case R.id.maquillaje:
+                        selecion = "Maquillaje";
+                        break;
+                    case R.id.juguetes:
+                        selecion = "Juguetes";
+                        break;
+                    case R.id.variedadess:
+                        selecion = "Variedades";
+                        break;
                 }
             }
         });

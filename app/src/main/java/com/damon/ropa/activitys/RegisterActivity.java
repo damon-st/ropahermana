@@ -76,6 +76,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 HashMap<String,Object> hashMap = new HashMap<>();
                                 hashMap.put("uid",uid);
                                 hashMap.put("names",names);
+                                hashMap.put("rol","user");
 
                                 reference.child(uid).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override

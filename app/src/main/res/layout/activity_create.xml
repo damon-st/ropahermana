@@ -17,6 +17,7 @@
 
 
         <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/titulo_edit_create"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
@@ -150,6 +151,21 @@
             android:fontFamily="@font/ubuntu_medium"
             android:textColor="@android:color/white"
             android:id="@+id/crear_prod"/>
+
+
+        <com.google.android.material.button.MaterialButton
+            style="@style/Widget.Shrine.Button"
+            android:backgroundTint="@android:color/holo_red_dark"
+            android:layout_margin="@dimen/_15sdp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Eliminar Este producto"
+            android:textSize="@dimen/_18ssp"
+            android:fontFamily="@font/ubuntu_medium"
+            android:textColor="@android:color/white"
+            android:id="@+id/delete_prod"
+            android:visibility="gone"
+            />
 
 
     </LinearLayout>

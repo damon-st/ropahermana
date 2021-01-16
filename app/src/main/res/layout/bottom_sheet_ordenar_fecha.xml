@@ -44,6 +44,37 @@
                 android:textColor="@color/textColorPrimary"
                 android:text="Pantalones"
                 android:id="@+id/pantalones"/>
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColorPrimary"
+                android:text="Para niñas"
+                android:id="@+id/ninas"/>
+
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColorPrimary"
+                android:text="Para niños"
+                android:id="@+id/ninos"/>
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColorPrimary"
+                android:text="Maquillaje"
+                android:id="@+id/maquillaje"/>
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColorPrimary"
+                android:text="Juguetes"
+                android:id="@+id/juguetes"/>
+            <RadioButton
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColorPrimary"
+                android:text="Variedades"
+                android:id="@+id/variedadess"/>
 
 
         </RadioGroup>

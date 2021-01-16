@@ -31,22 +31,37 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <LinearLayout
+        android:layout_below="@+id/bar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentLeft="true"
+        android:background="@drawable/shr_product_grid_background_shape"
+        >
+
+
+
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/bar"
         android:orientation="vertical"
         android:background="@color/colorAccent"
-        android:elevation="8dp"
+        android:backgroundTint="@android:color/transparent"
         >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:background="@drawable/shr_product_grid_background_shape"
             >
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_margin="18dp"
                 app:cardCornerRadius="15dp"
                 android:elevation="2dp"
@@ -59,10 +74,18 @@
                     />
             </com.google.android.material.card.MaterialCardView>
 
-           <ScrollView
-               android:layout_width="match_parent"
-               android:layout_height="match_parent"
-               android:scrollbars="vertical">
+
+            <ImageView
+                android:id="@+id/editar_prod"
+                android:layout_width="@dimen/_50sdp"
+                android:layout_height="@dimen/_50sdp"
+                android:src="@drawable/ic_edit"
+                android:layout_gravity="end"
+                android:layout_margin="@dimen/_10sdp"
+                app:tint="@color/colorPrimaryDark"
+                android:visibility="gone"
+                />
+
 
                <LinearLayout
                    android:layout_width="match_parent"
@@ -248,18 +271,21 @@
                        >
 
                        <ImageView
+                           android:id="@+id/whats"
                            android:layout_width="55dp"
                            android:layout_height="55dp"
                            android:src="@drawable/w"
                            android:layout_weight="1"
                            />
                        <ImageView
+                           android:id="@+id/telegram"
                            android:layout_width="55dp"
                            android:layout_height="55dp"
                            android:src="@drawable/telgram"
                            android:layout_weight="1"
                            />
                        <ImageView
+                           android:id="@+id/instagram"
                            android:layout_width="55dp"
                            android:layout_height="55dp"
                            android:src="@drawable/i"
@@ -272,12 +298,11 @@
 
                </LinearLayout>
 
-           </ScrollView>
 
 
         </LinearLayout>
 
 
+    </androidx.core.widget.NestedScrollView>
     </LinearLayout>
-
 </RelativeLayout>

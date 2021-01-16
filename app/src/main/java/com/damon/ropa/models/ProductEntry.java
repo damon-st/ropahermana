@@ -13,13 +13,22 @@ public class ProductEntry implements Serializable {
     private int cantidad;
     public String id;
     private String marca;
+    private String imgPortada;
 
     private String category;
 
     public ProductEntry() {
     }
 
-    public ProductEntry(String title, List<ImagesList> url, double price, String description, int cantidad, String id, String marca, String category) {
+    public String getImgPortada() {
+        return imgPortada;
+    }
+
+    public void setImgPortada(String imgPortada) {
+        this.imgPortada = imgPortada;
+    }
+
+    public ProductEntry(String title, List<ImagesList> url, double price, String description, int cantidad, String id, String marca, String category,String imgPortada) {
         this.title = title;
         this.url = url;
         this.price = price;
@@ -28,6 +37,7 @@ public class ProductEntry implements Serializable {
         this.id = id;
         this.marca = marca;
         this.category = category;
+        this.imgPortada = imgPortada;
     }
 
     public List<ImagesList> getUrl() {
