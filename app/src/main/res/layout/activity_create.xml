@@ -11,7 +11,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
 
@@ -35,11 +35,12 @@
             android:hint="Titulo"
             android:layout_margin="15dp"
             >
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
                 android:id="@+id/titulo_prod"
+                android:inputType="text"
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -51,10 +52,12 @@
             android:hint="Descripcion"
             android:layout_margin="15dp"
             >
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/des_prod"
+                android:inputType="text"
+
                 />
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -66,7 +69,7 @@
             android:hint="Precio"
             android:layout_margin="15dp"
             >
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -84,7 +87,7 @@
             android:hint="Cantidad Disponible"
             android:layout_margin="15dp"
             >
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
@@ -102,7 +105,7 @@
             android:hint="Marca"
             android:layout_margin="15dp"
             >
-            <com.google.android.material.textfield.TextInputEditText
+            <androidx.appcompat.widget.AppCompatEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"

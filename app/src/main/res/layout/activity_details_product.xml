@@ -52,12 +52,10 @@
                 android:elevation="2dp"
                 >
 
-                <ImageView
+                <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
-                    android:layout_height="400dp"
-                    android:id="@+id/image_product"
-                    android:transitionName="@string/transition"
-                    android:scaleType="centerCrop"
+                    android:layout_height="match_parent"
+                    android:id="@+id/img_reycler"
                     />
             </com.google.android.material.card.MaterialCardView>
 
@@ -69,7 +67,9 @@
                <LinearLayout
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"
-                   android:orientation="vertical">
+                   android:orientation="vertical"
+                   android:layout_margin="@dimen/_5sdp"
+                   >
                    <LinearLayout
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
@@ -81,6 +81,35 @@
                            android:fontFamily="@font/ubuntu_bold"
                            android:textSize="18sp"
                            android:text="Categoria: "
+                           android:layout_weight="1"
+                           android:textColor="@color/colorPrimaryDark"
+                           />
+
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:text="Titulo"
+                           android:textAlignment="center"
+                           android:textSize="18sp"
+                           android:gravity="center_horizontal"
+                           android:id="@+id/category"
+                           android:fontFamily="@font/ubuntu_bold"
+                           android:textColor="@android:color/black"
+
+                           android:layout_weight="1"
+                           />
+                   </LinearLayout><LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:fontFamily="@font/ubuntu_bold"
+                           android:textSize="18sp"
+                           android:text="Nombre: "
                            android:layout_weight="1"
                            android:textColor="@color/colorPrimaryDark"
                            />
@@ -166,6 +195,38 @@
                            android:layout_weight="1"
                            />
                    </LinearLayout>
+                   <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:text="Cantidad Disponible:"
+                           android:textAlignment="textStart"
+                           android:textSize="18sp"
+                           android:gravity="center_horizontal"
+                           tools:ignore="RtlCompat"
+                           android:textColor="@color/colorPrimaryDark"
+                           android:fontFamily="@font/ubuntu_medium"
+                           android:layout_weight="1"
+                           />
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:text=""
+                           android:textAlignment="center"
+                           android:textSize="18sp"
+                           android:gravity="center_horizontal"
+                           android:id="@+id/cantidad"
+                           tools:ignore="RtlCompat"
+                           android:textColor="@android:color/black"
+                           android:fontFamily="@font/ubuntu_medium"
+                           android:layout_weight="1"
+                           />
+                   </LinearLayout>
 
 
                    <TextView
@@ -182,22 +243,29 @@
                    <LinearLayout
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
-                       android:orientation="horizontal">
+                       android:orientation="horizontal"
+                       android:layout_marginBottom="@dimen/_10sdp"
+                       >
 
                        <ImageView
                            android:layout_width="55dp"
                            android:layout_height="55dp"
                            android:src="@drawable/w"
-                           android:layout_marginStart="100dp"
-                           android:layout_marginLeft="100dp" />
+                           android:layout_weight="1"
+                           />
                        <ImageView
-                           android:layout_marginStart="100dp"
+                           android:layout_width="55dp"
+                           android:layout_height="55dp"
+                           android:src="@drawable/telgram"
+                           android:layout_weight="1"
+                           />
+                       <ImageView
                            android:layout_width="55dp"
                            android:layout_height="55dp"
                            android:src="@drawable/i"
-                           android:scaleType="centerCrop"
                            android:background="@android:color/white"
-                           android:layout_marginLeft="100dp" />
+                           android:layout_weight="1"
+                           />
 
 
                    </LinearLayout>

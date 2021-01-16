@@ -2,11 +2,12 @@ package com.damon.ropa.models;
 
 
 import java.io.Serializable;
+import java.util.List;
 
 public class ProductEntry implements Serializable {
 
     public  String title;
-    public  String url;
+    public List<ImagesList> url;
     public  double price;
     public  String description;
     private int cantidad;
@@ -18,8 +19,7 @@ public class ProductEntry implements Serializable {
     public ProductEntry() {
     }
 
-
-    public ProductEntry(String title, String url, double price, String description, int cantidad, String id, String marca, String category) {
+    public ProductEntry(String title, List<ImagesList> url, double price, String description, int cantidad, String id, String marca, String category) {
         this.title = title;
         this.url = url;
         this.price = price;
@@ -28,6 +28,14 @@ public class ProductEntry implements Serializable {
         this.id = id;
         this.marca = marca;
         this.category = category;
+    }
+
+    public List<ImagesList> getUrl() {
+        return url;
+    }
+
+    public void setUrl(List<ImagesList> url) {
+        this.url = url;
     }
 
     public String getMarca() {
@@ -58,9 +66,6 @@ public class ProductEntry implements Serializable {
         this.title = title;
     }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
 
     public void setPrice(double price) {
         this.price = price;
@@ -82,9 +87,6 @@ public class ProductEntry implements Serializable {
         return title;
     }
 
-    public String getUrl() {
-        return url;
-    }
 
     public double getPrice() {
         return price;

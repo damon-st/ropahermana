@@ -5,6 +5,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.app.Application;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.transition.Fade;
@@ -15,6 +16,8 @@ import com.damon.ropa.app.RopaAplication;
 import com.damon.ropa.fragments.ProductGridFragment;
 import com.damon.ropa.interfaces.NavigationHost;
 import com.google.firebase.FirebaseApp;
+
+import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements NavigationHost {
 
@@ -66,5 +69,39 @@ public class MainActivity extends AppCompatActivity implements NavigationHost {
             transaction.addToBackStack(null);
         }
         transaction.commit();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        try {
+            deleteCache(getApplicationContext());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void deleteCache(Context context) {
+        try {
+            File dir = context.getCacheDir();
+            deleteDir(dir);
+        } catch (Exception e) {}
+    }
+    public static boolean deleteDir(File dir) {
+        if (dir != null && dir.isDirectory()) {
+            String[] children = dir.list();
+            for (int i = 0; i < children.length; i++) {
+                boolean success = deleteDir(new File(dir, children[i]));
+                if (!success) {
+                    return false;
+                }
+            }
+            return dir.delete();
+        } else if (dir != null && dir.isFile()) {
+            return dir.delete();
+        } else {
+            return false;
+        }
     }
 }

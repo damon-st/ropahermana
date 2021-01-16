@@ -20,19 +20,25 @@
         style="@style/Widget.Shrine.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mochilas" />
+        android:text="Mochilas"
+        android:id="@+id/mochilas"
+        />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.Shrine.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Niña y Niño" />
+        android:text="Niña y Niño"
+        android:id="@+id/ninos"
+        />
 
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.Shrine.Button.TextButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Variedades" />
+        android:text="Variedades"
+        android:id="@+id/variedades"
+        />
 
 
     <View

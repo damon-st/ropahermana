@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.damon.ropa.R;
 import com.damon.ropa.holder.ProductCardViewHolder;
+import com.damon.ropa.models.ImagesList;
 import com.damon.ropa.models.ProductEntry;
 import com.squareup.picasso.Picasso;
 
@@ -38,7 +39,10 @@ public class ProductCardRecyclerViewAdapter extends RecyclerView.Adapter<Product
             ProductEntry product = productList.get(position);
             holder.productTitle.setText(product.title);
             holder.productPrice.setText("$"+product.price);
-            Picasso.get().load(product.url).into(holder.productImage);
+            for (ImagesList  url: product.getUrl()){
+
+            }
+            Picasso.get().load(product.url.get(position).getUrl()).into(holder.productImage);
         }
     }
 

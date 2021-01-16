@@ -35,15 +35,18 @@ public class StaggeredProductCardRecyclerViewAdapter extends RecyclerView.Adapte
     public int getItemViewType(int position) {
         return position % 3;
     }
-
+    int layoutId;
     @NonNull
     @Override
     public StaggeredProductCardViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        int layoutId = R.layout.shr_staggered_product_card_first;
+
         if (viewType == 1) {
             layoutId = R.layout.shr_staggered_product_card_second;
         } else if (viewType == 2) {
             layoutId = R.layout.shr_staggered_product_card_third;
+        }else {
+             layoutId = R.layout.shr_staggered_product_card_first;
+
         }
 
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
@@ -57,7 +60,8 @@ public class StaggeredProductCardRecyclerViewAdapter extends RecyclerView.Adapte
             ProductEntry product = productList.get(position);
             holder.productTitle.setText(product.title);
             holder.productPrice.setText("$"+product.price);
-            Picasso.get().load(product.url).resize(200,200).into(holder.productImage);
+
+            Picasso.get().load(product.url.get(position).getUrl()).resize(250,250).into(holder.productImage);
 
             holder.productImage.setOnClickListener(new View.OnClickListener() {
                 @Override

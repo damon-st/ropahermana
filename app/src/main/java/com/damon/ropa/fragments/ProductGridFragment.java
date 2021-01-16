@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
@@ -22,6 +23,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
@@ -32,11 +34,16 @@ import android.widget.Toast;
 import com.damon.ropa.R;
 import com.damon.ropa.activitys.LoginActivity;
 import com.damon.ropa.adapters.StaggeredProductCardRecyclerViewAdapter;
+import com.damon.ropa.holder.ImagesUrl;
+import com.damon.ropa.interfaces.FiltrosI;
+import com.damon.ropa.models.ImagesList;
 import com.damon.ropa.models.ProductEntry;
+import com.damon.ropa.utils.CustomBottomSheet;
 import com.damon.ropa.utils.NavigationIconClickListener;
 import com.damon.ropa.utils.ProductGridItemDecoration;
 import com.google.android.material.button.MaterialButton;
 import com.google.firebase.FirebaseApp;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,10 +53,10 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductGridFragment extends Fragment {
+public class ProductGridFragment extends Fragment implements FiltrosI {
 
     DatabaseReference reference;
-    MaterialButton btn_mujer,btn_hombre,btn_cuenta;
+    MaterialButton btn_mujer,btn_hombre,btn_cuenta,btn_mochila,btn_nino,btn_variedades;
     String typo = "Mujer";
     ArrayList<ProductEntry> productEntryArrayList;
     StaggeredProductCardRecyclerViewAdapter adapter;
@@ -95,7 +102,7 @@ public class ProductGridFragment extends Fragment {
                 return position % 3 == 2 ? 2 : 1;
             }
         });
-        reference = FirebaseDatabase.getInstance().getReference("Ropa");
+        reference = FirebaseDatabase.getInstance().getReference().child("Ropa");
         getProducsT(typo);
         recyclerView.setLayoutManager(gridLayoutManager);
          adapter = new StaggeredProductCardRecyclerViewAdapter(productEntryArrayList,getActivity());
@@ -113,6 +120,9 @@ public class ProductGridFragment extends Fragment {
         btn_mujer = view.findViewById(R.id.mujer);
         btn_hombre = view.findViewById(R.id.hombre);
         scrollView = view.findViewById(R.id.product_grid);
+        btn_mochila = view.findViewById(R.id.mochilas);
+        btn_nino  = view.findViewById(R.id.ninos);
+        btn_variedades = view.findViewById(R.id.variedades);
 
 
         closeIcon =  getContext().getResources().getDrawable(R.drawable.shr_close_menu);
@@ -144,6 +154,34 @@ public class ProductGridFragment extends Fragment {
             }
         });
 
+        btn_mochila.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeOrNoMenu();
+                typo="Mochilas";
+                getProducsT(typo);
+            }
+        });
+
+        btn_nino.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeOrNoMenu();
+                typo="NiñoyNiña";
+                getProducsT(typo);
+            }
+        });
+
+        btn_variedades.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                closeOrNoMenu();
+                typo="Variedades";
+                getProducsT(typo);
+            }
+        });
+
+
         btn_cuenta.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -174,27 +212,62 @@ public class ProductGridFragment extends Fragment {
     }
 
 
+    List<ImagesList> imagesUrls = new ArrayList<>();
     void getProducsT(String  typo){
-        if (productEntryArrayList.size()>0){
+        try {
             productEntryArrayList.clear();
+            imagesUrls.clear();
+            adapter.notifyDataSetChanged();
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        reference.child(typo).addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+        reference.child(typo).addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()) {
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        ProductEntry productEntry = dataSnapshot.getValue(ProductEntry.class);
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                    if (dataSnapshot.exists()){
+                        String title = dataSnapshot.child("title").getValue().toString();
+                        double price = Double.parseDouble(dataSnapshot.child("price").getValue().toString());
+                        String descripcion = dataSnapshot.child("description").getValue().toString();
+                        int cantidad = Integer.parseInt(dataSnapshot.child("cantidad").getValue().toString());
+                        String id = dataSnapshot.child("id").getValue().toString();
+                        String marca = dataSnapshot.child("marca").getValue().toString();
+                        String category = dataSnapshot.child("category").getValue().toString();
+                        System.out.println(dataSnapshot.child(id).child("url"));
+                        if (dataSnapshot.child("url").getChildrenCount()>0){
+                            for (DataSnapshot urls : dataSnapshot.child("url").getChildren()){
+                                imagesUrls.add(new ImagesList(urls.getKey(),urls.getValue().toString()));
+                                System.out.println(urls.getValue().toString());
+                            }
+                        }
+
+                        ProductEntry productEntry = new ProductEntry(title,imagesUrls,price,descripcion,cantidad,id,marca,category);
                         productEntryArrayList.add(productEntry);
+
+
+                        adapter.notifyDataSetChanged();
                     }
+            }
 
-                    adapter.notifyDataSetChanged();
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
-                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                System.out.println(error.getMessage());
+
             }
         });
 //        ArrayList<ProductEntry> productEntryArrayList = new ArrayList<>();
@@ -236,6 +309,16 @@ public class ProductGridFragment extends Fragment {
         super.onCreateOptionsMenu(menu, menuInflater);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() ==R.id.filter){
+
+            MostarDialog();
+            return true;
+        }
+        return false;
+
+    }
 
     private void updateIcon(Toolbar view) {
         if (openIcon != null && closeIcon != null) {
@@ -248,5 +331,17 @@ public class ProductGridFragment extends Fragment {
                 ((Toolbar) view).setNavigationIcon(openIcon);
             }
         }
+    }
+
+    private void MostarDialog(){
+        CustomBottomSheet customBottomSheet = new CustomBottomSheet(getActivity(), this);
+        customBottomSheet.setCancelable(true);
+        customBottomSheet.show(getFragmentManager(),customBottomSheet.getTag());
+    }
+
+    @Override
+    public void onClikFiltrar(String filtro) {
+        typo=filtro;
+        getProducsT(typo);
     }
 }

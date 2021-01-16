@@ -3,13 +3,19 @@ package com.damon.ropa.activitys;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
@@ -61,7 +67,7 @@ public class CreateActivity extends AppCompatActivity {
     DatabaseReference refCategoria;
 
     RecyclerView imgRecycler;
-    TextInputEditText titulo, description, precio, cantidad, marca;
+    AppCompatEditText titulo, description, precio, cantidad, marca;
     List<String> url_list = new ArrayList<>();
     ImagesUrlAdapter imagesUrlAdapter;
     LinearLayoutManager linearLayoutManager;
@@ -69,6 +75,7 @@ public class CreateActivity extends AppCompatActivity {
 
     private Dialog dialogProgress;
     private TextView textoProgress;
+
 
     DatabaseReference productoRef;
     StorageReference firebaseStorage, filePath;
@@ -78,13 +85,24 @@ public class CreateActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                // ActivityCompat.requestPermissions(MainActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.RECORD_AUDIO,Manifest.permission.READ_EXTERNAL_STORAGE}, 1000);
+                ActivityCompat.requestPermissions(CreateActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 1000);
+            }
+        }
+
         categoriaSpinner = findViewById(R.id.categirias_spinner);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeConsulta);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         categoriaSpinner.setAdapter(adapter);
 
         refCategoria = FirebaseDatabase.getInstance().getReference().child("Categorias");
-        productoRef =  FirebaseDatabase.getInstance().getReference("Ropa");
+        category = "Carteras";
+        productoRef =  FirebaseDatabase.getInstance().getReference().child("Ropa").child(category);
         firebaseStorage = FirebaseStorage.getInstance().getReference().child("Products");
         dialogProgress = new Dialog(this);
 
@@ -95,13 +113,13 @@ public class CreateActivity extends AppCompatActivity {
         imagesUrlAdapter = new ImagesUrlAdapter(url_list,this);
         imgRecycler.setAdapter(imagesUrlAdapter);
 
-        btn_create = findViewById(R.id.crear_prod);
-        camera = findViewById(R.id.camera);
+        btn_create =findViewById(R.id.crear_prod);
+        camera =  findViewById(R.id.camera);
         titulo = findViewById(R.id.titulo_prod);
-        description = findViewById(R.id.des_prod);
-        precio = findViewById(R.id.precio_prod);
+        description =findViewById(R.id.des_prod);
+        precio =findViewById(R.id.precio_prod);
         cantidad = findViewById(R.id.cant_prod);
-        marca = findViewById(R.id.marca_prod);
+        marca =findViewById(R.id.marca_prod);
 
         getSpinnerInfo();
 
@@ -118,7 +136,7 @@ public class CreateActivity extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                category = nomeConsulta.get(position);
                 System.out.println(category);
-                productoRef =  FirebaseDatabase.getInstance().getReference("Ropa").child(category);
+                productoRef =  FirebaseDatabase.getInstance().getReference().child("Ropa").child(category);
             }
 
             @Override
@@ -184,15 +202,32 @@ public class CreateActivity extends AppCompatActivity {
 
          title = titulo.getText().toString();
         descripcion = description.getText().toString();
+        String prices = precio.getText().toString();
+        String cantidads = cantidad.getText().toString();
 
-        if (TextUtils.isEmpty(title) && TextUtils.isEmpty(descripcion)){
+        if (title.equals("") || descripcion.length()==0 ||TextUtils.isEmpty(prices) || TextUtils.isEmpty(cantidads) ||
+                TextUtils.isEmpty(marca.getText().toString())
+            ){
             Toast.makeText(this, "LLena los campos porfavor", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }else {
 
-        price = Double.parseDouble(precio.getText().toString());
-        cantidadProducto = Integer.parseInt(cantidad.getText().toString());
-        marcaProd = marca.getText().toString();
+
+            try {
+                price = Double.parseDouble(prices);
+                cantidadProducto = Integer.parseInt(cantidads);
+                marcaProd = marca.getText().toString();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            System.out.println("Title" + title);
+            System.out.println("Descripcion" + descripcion);
+            System.out.println("price" + price);
+            System.out.println("catidadProducto" + cantidadProducto);
+            System.out.println("marcaprod" + marcaProd);
+            System.out.println("category" + category);
 
         ShowProgress();
 
@@ -205,7 +240,7 @@ public class CreateActivity extends AppCompatActivity {
                 final int finalI = i;
 
                 System.out.println("uris " + url_list.get(i));
-                String mediaId = productoRef.child(category).child("url").push().getKey();
+                String mediaId = productoRef.child("url").push().getKey();
 
                 mediaIdList.add(mediaId);
 
@@ -239,6 +274,7 @@ public class CreateActivity extends AppCompatActivity {
                 final byte[] thumb_byte = byteArrayOutputStream.toByteArray();
 
 
+                if (textoProgress != null) textoProgress.setText("Imagenes por subir " + i);
 
                 firebaseStorage.child(addChild + "." + "png").putBytes(thumb_byte).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                     @Override
@@ -253,6 +289,7 @@ public class CreateActivity extends AppCompatActivity {
 
 
                                     totalMEdia++;
+                                    if (textoProgress !=null) textoProgress.setText("Imagenes subidas " + totalMEdia );
 
                                     if (listaNueva.size() == url_list.size())
                                         updateVentaDataBase(ref,hashMap);
@@ -274,6 +311,7 @@ public class CreateActivity extends AppCompatActivity {
 
             updateVentaDataBase(ref,hashMap);
         }
+        }
 
     }
 
@@ -293,7 +331,8 @@ public class CreateActivity extends AppCompatActivity {
         hashMap.put("description", descripcion);
         hashMap.put("cantidad", cantidadProducto);
         hashMap.put("category", category);
-        hashMap.put("marca", marca);
+        hashMap.put("marca", marcaProd);
+        hashMap.put("price", price);
 
 
         productoRef.child(ref).updateChildren(hashMap).addOnCompleteListener(new OnCompleteListener<Void>() {
