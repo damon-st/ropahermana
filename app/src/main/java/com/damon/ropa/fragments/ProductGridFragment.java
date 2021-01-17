@@ -13,6 +13,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
@@ -55,7 +56,7 @@ import java.util.List;
 
 public class ProductGridFragment extends Fragment implements FiltrosI {
 
-    DatabaseReference reference;
+    DatabaseReference reference,queryRef;
     MaterialButton btn_mujer,btn_hombre,btn_cuenta,btn_mochila,btn_nino,btn_variedades;
     String typo = "Mujer";
     ArrayList<ProductEntry> productEntryArrayList;
@@ -103,6 +104,7 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
             }
         });
         reference = FirebaseDatabase.getInstance().getReference().child("Ropa");
+
         getProducsT(typo);
         recyclerView.setLayoutManager(gridLayoutManager);
          adapter = new StaggeredProductCardRecyclerViewAdapter(productEntryArrayList,getActivity());
@@ -346,6 +348,27 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.shr_toolbar_menu, menu);
+        MenuItem menuItem = menu.findItem(R.id.search);
+        SearchView searchView = (SearchView)menuItem.getActionView();
+        searchView.setQueryHint("Busqueda por nombre del producto");
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                try {
+                    getProductQuery(newText.toLowerCase());
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                return true;
+            }
+        });
+
         super.onCreateOptionsMenu(menu, menuInflater);
     }
 
@@ -384,4 +407,109 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
         typo=filtro;
         getProducsT(typo);
     }
+
+    void getProductQuery(String  typos){
+        if (productEntryArrayList.size()>0){
+            try {
+                productEntryArrayList.clear();
+                imagesUrls.clear();
+                adapter.notifyDataSetChanged();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+
+        System.out.println("Typo" + typo);
+        reference.child(typo).orderByChild("title").startAt(typos).endAt(typos+"\uf8ff").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                if (dataSnapshot.exists()){
+                    String title = dataSnapshot.child("title").getValue().toString();
+                    double price = Double.parseDouble(dataSnapshot.child("price").getValue().toString());
+                    String descripcion = dataSnapshot.child("description").getValue().toString();
+                    int cantidad = Integer.parseInt(dataSnapshot.child("cantidad").getValue().toString());
+                    String id = dataSnapshot.child("id").getValue().toString();
+                    String marca = dataSnapshot.child("marca").getValue().toString();
+                    String category = dataSnapshot.child("category").getValue().toString();
+                    System.out.println(dataSnapshot.child(id).child("url"));
+                    String imgPortada = dataSnapshot.child("imgPortada").getValue().toString();
+                    if (dataSnapshot.child("url").getChildrenCount()>0){
+                        for (DataSnapshot urls : dataSnapshot.child("url").getChildren()){
+                            imagesUrls.add(new ImagesList(urls.getKey(),urls.getValue().toString()));
+                            System.out.println(urls.getValue().toString());
+                        }
+
+                        ProductEntry productEntry = new ProductEntry(title,imagesUrls,price,descripcion,cantidad,id,marca,category,imgPortada);
+                        productEntryArrayList.add(productEntry);
+
+
+                        adapter.notifyDataSetChanged();
+                    }
+
+
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                if (dataSnapshot.exists()){
+                    String title = dataSnapshot.child("title").getValue().toString();
+                    double price = Double.parseDouble(dataSnapshot.child("price").getValue().toString());
+                    String descripcion = dataSnapshot.child("description").getValue().toString();
+                    int cantidad = Integer.parseInt(dataSnapshot.child("cantidad").getValue().toString());
+                    String id = dataSnapshot.child("id").getValue().toString();
+                    String marca = dataSnapshot.child("marca").getValue().toString();
+                    String category = dataSnapshot.child("category").getValue().toString();
+                    String imgPortada = dataSnapshot.child("imgPortada").getValue().toString();
+
+                    System.out.println(dataSnapshot.child(id).child("url"));
+                    if (dataSnapshot.child("url").getChildrenCount()>0){
+                        for (DataSnapshot urls : dataSnapshot.child("url").getChildren()){
+                            imagesUrls.add(new ImagesList(urls.getKey(),urls.getValue().toString()));
+                            System.out.println(urls.getValue().toString());
+                        }
+                    }
+                    String key = dataSnapshot.getKey();
+
+                    ProductEntry productEntry = new ProductEntry(title,imagesUrls,price,descripcion,cantidad,id,marca,category,imgPortada);
+                    int index = productEntryArrayList.indexOf(key);
+                    try {
+                        productEntryArrayList.set(index,productEntry);
+                        adapter.notifyDataSetChanged();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        ((Activity)getContext()).recreate();
+                    }
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                String key = dataSnapshot.getKey();
+                int index = productEntryArrayList.indexOf(key);
+                try {
+                    adapter.notifyItemRemoved(index);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    getActivity().recreate();
+                }
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+//        ArrayList<ProductEntry> productEntryArrayList = new ArrayList<>();
+//        productEntryArrayList.add(new ProductEntry("Hola","https://i.postimg.cc/59C4TJh2/1.jpg",0,"",1));
+//        return productEntryArrayList;
+    }
+
 }

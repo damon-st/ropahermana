@@ -93,7 +93,73 @@
                    android:orientation="vertical"
                    android:layout_margin="@dimen/_5sdp"
                    >
+
                    <LinearLayout
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
+
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:text="Titulo"
+                           android:textAlignment="textStart"
+                           android:textSize="@dimen/_20ssp"
+                           android:gravity="center_horizontal"
+                           android:id="@+id/titulo"
+                           android:fontFamily="@font/ubuntu_bold"
+                           android:textColor="@android:color/black"
+                           android:layout_weight="1"
+                           tools:ignore="RtlCompat" />
+
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:text="Price"
+                           android:textAlignment="textEnd"
+                           android:textSize="@dimen/_16ssp"
+                           android:gravity="center_horizontal"
+                           android:id="@+id/precio"
+                           tools:ignore="RtlCompat"
+                           android:textColor="@android:color/black"
+                           android:fontFamily="@font/ubuntu_medium"
+                           android:layout_weight="1"
+                           />
+                   </LinearLayout>
+                   <LinearLayout
+                       android:layout_marginTop="@dimen/_10sdp"
+                       android:layout_width="match_parent"
+                       android:layout_height="wrap_content"
+                       android:orientation="horizontal">
+                       <TextView
+                           android:layout_width="match_parent"
+                           android:layout_height="wrap_content"
+                           android:layout_margin="5dp"
+                           android:text="Descripcion"
+                           android:textAlignment="textStart"
+                           android:textSize="@dimen/_16sdp"
+                           android:gravity="center_horizontal"
+                           android:id="@+id/description"
+                           tools:ignore="RtlCompat"
+                           android:textColor="#2C2C2C"
+                           android:fontFamily="@font/ubuntu_medium"
+                           android:layout_weight="1"
+                           />
+                   </LinearLayout>
+
+                   <View
+                       android:layout_marginTop="@dimen/_5sdp"
+                       android:layout_width="match_parent"
+                       android:layout_marginStart="@dimen/_30sdp"
+                       android:layout_marginLeft="@dimen/_30sdp"
+                       android:layout_marginEnd="@dimen/_30sdp"
+                       android:layout_height="@dimen/_2sdp"
+                       android:background="@color/colorAccent"/>
+
+                   <LinearLayout
+                       android:layout_marginTop="@dimen/_5sdp"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
                        android:orientation="horizontal">
@@ -122,103 +188,14 @@
 
                            android:layout_weight="1"
                            />
-                   </LinearLayout><LinearLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:orientation="horizontal">
-                       <TextView
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:layout_margin="5dp"
-                           android:fontFamily="@font/ubuntu_bold"
-                           android:textSize="18sp"
-                           android:text="Nombre: "
-                           android:layout_weight="1"
-                           android:textColor="@color/colorPrimaryDark"
-                           />
-
-                       <TextView
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:layout_margin="5dp"
-                           android:text="Titulo"
-                           android:textAlignment="center"
-                           android:textSize="18sp"
-                           android:gravity="center_horizontal"
-                           android:id="@+id/titulo"
-                           android:fontFamily="@font/ubuntu_bold"
-                           android:textColor="@android:color/black"
-
-                           android:layout_weight="1"
-                           />
                    </LinearLayout>
 
-                   <LinearLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:orientation="horizontal">
-                       <TextView
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:layout_margin="5dp"
-                           android:text="Precio: "
-                           android:textAlignment="textStart"
-                           android:textSize="18sp"
-                           android:gravity="center_horizontal"
-                           tools:ignore="RtlCompat"
-                           android:textColor="@color/colorPrimaryDark"
-                           android:fontFamily="@font/ubuntu_medium"
-                           android:layout_weight="1"
-                           />
-                       <TextView
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:layout_margin="5dp"
-                           android:text="Titulo"
-                           android:textAlignment="center"
-                           android:textSize="18sp"
-                           android:gravity="center_horizontal"
-                           android:id="@+id/precio"
-                           tools:ignore="RtlCompat"
-                           android:textColor="@android:color/black"
-                           android:fontFamily="@font/ubuntu_medium"
-                           android:layout_weight="1"
-                           />
-                   </LinearLayout>
+
+
+
 
                    <LinearLayout
-                       android:layout_width="match_parent"
-                       android:layout_height="wrap_content"
-                       android:orientation="horizontal">
-                       <TextView
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:layout_margin="5dp"
-                           android:text="Descripcion"
-                           android:textAlignment="textStart"
-                           android:textSize="18sp"
-                           android:gravity="center_horizontal"
-                           tools:ignore="RtlCompat"
-                           android:textColor="@color/colorPrimaryDark"
-                           android:fontFamily="@font/ubuntu_medium"
-                           android:layout_weight="1"
-                           />
-                       <TextView
-                           android:layout_width="match_parent"
-                           android:layout_height="wrap_content"
-                           android:layout_margin="5dp"
-                           android:text="Titulo"
-                           android:textAlignment="center"
-                           android:textSize="18sp"
-                           android:gravity="center_horizontal"
-                           android:id="@+id/description"
-                           tools:ignore="RtlCompat"
-                           android:textColor="@android:color/black"
-                           android:fontFamily="@font/ubuntu_medium"
-                           android:layout_weight="1"
-                           />
-                   </LinearLayout>
-                   <LinearLayout
+                       android:layout_marginTop="@dimen/_5sdp"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
                        android:orientation="horizontal">
@@ -253,6 +230,7 @@
 
 
                    <TextView
+                       android:layout_marginTop="@dimen/_5sdp"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
                        android:textColor="@color/colorPrimaryDark"
@@ -264,6 +242,7 @@
 
 
                    <LinearLayout
+                       android:layout_marginTop="@dimen/_5sdp"
                        android:layout_width="match_parent"
                        android:layout_height="wrap_content"
                        android:orientation="horizontal"

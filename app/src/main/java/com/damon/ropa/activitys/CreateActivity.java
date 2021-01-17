@@ -248,7 +248,7 @@ public class CreateActivity extends AppCompatActivity {
 
 
     private void UpdateVenta(){
-        title = titulo.getText().toString();
+        title = titulo.getText().toString().toLowerCase();
         descripcion = description.getText().toString();
         String prices = precio.getText().toString();
         String cantidads = cantidad.getText().toString();
@@ -457,7 +457,7 @@ public class CreateActivity extends AppCompatActivity {
 
     private void saveVenta(){
 
-         title = titulo.getText().toString();
+         title = titulo.getText().toString().toLowerCase();
         descripcion = description.getText().toString();
         String prices = precio.getText().toString();
         String cantidads = cantidad.getText().toString();

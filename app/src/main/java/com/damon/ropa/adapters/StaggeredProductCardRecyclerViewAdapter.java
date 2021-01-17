@@ -58,7 +58,7 @@ public class StaggeredProductCardRecyclerViewAdapter extends RecyclerView.Adapte
         System.out.println(productList.get(position).getUrl());
 
             ProductEntry product = productList.get(position);
-            holder.productTitle.setText(product.title);
+            holder.productTitle.setText(product.title.toUpperCase());
             holder.productPrice.setText("$"+product.price);
 
             Picasso.get().load(product.getImgPortada()).resize(250,250).into(holder.productImage);

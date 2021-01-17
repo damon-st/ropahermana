@@ -72,7 +72,7 @@ public class DetailsProduct extends AppCompatActivity {
         if (bundle != null){
              productEntry =(ProductEntry) bundle.getSerializable("product");
             System.out.println(productEntry.url);
-            title.setText(productEntry.getTitle());
+            title.setText(productEntry.getTitle().toUpperCase());
             price.setText("$" + productEntry.getPrice());
             descripton.setText(productEntry.getDescription());
             cantidad.setText(""+productEntry.getCantidad());
