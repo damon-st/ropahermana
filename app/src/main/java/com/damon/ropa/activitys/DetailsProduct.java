@@ -101,7 +101,7 @@ public class DetailsProduct extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse("http://telegram.me/BrayanCevallos"));
+                    i.setData(Uri.parse("http://telegram.me/JasminCevallos"));
                     final String appName = "org.telegram.messenger";
                     i.setPackage(appName);
                     startActivity(i);

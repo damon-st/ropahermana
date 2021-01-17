@@ -30,7 +30,11 @@ public class ImageViewerActivity extends AppCompatActivity {
 //        getActionBar().hide();
 
         Intent intent = getIntent();
-        photoView = new PhotoViewAttacher(imageView);
+        try {
+            photoView = new PhotoViewAttacher(imageView);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
         if (intent !=null && intent.getExtras() !=null){
