@@ -117,7 +117,7 @@ public class DetailsProduct extends AppCompatActivity {
 
 
     void getImages(String ref,String id){
-        reference.child(ref).child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+        reference.child(id).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()){

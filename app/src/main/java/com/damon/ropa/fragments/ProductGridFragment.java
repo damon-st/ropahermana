@@ -215,7 +215,9 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
 
 
     List<ImagesList> imagesUrls = new ArrayList<>();
+
     void getProducsT(String  typo){
+
         if (productEntryArrayList.size()>0){
             try {
                 productEntryArrayList.clear();
@@ -228,7 +230,7 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
         }
 
 
-        reference.child(typo).addChildEventListener(new ChildEventListener() {
+        reference.orderByChild("category").startAt(typo).endAt(typo+"\uf8ff").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
                     if (dataSnapshot.exists()){
@@ -421,7 +423,7 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
         }
 
         System.out.println("Typo" + typo);
-        reference.child(typo).orderByChild("title").startAt(typos).endAt(typos+"\uf8ff").addChildEventListener(new ChildEventListener() {
+        reference.orderByChild("title").startAt(typos).endAt(typos+"\uf8ff").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
                 if (dataSnapshot.exists()){

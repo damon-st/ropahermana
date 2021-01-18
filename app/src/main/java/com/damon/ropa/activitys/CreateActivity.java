@@ -117,7 +117,7 @@ public class CreateActivity extends AppCompatActivity {
 
         refCategoria = FirebaseDatabase.getInstance().getReference().child("Categorias");
         category = "Carteras";
-        productoRef =  FirebaseDatabase.getInstance().getReference().child("Ropa").child(category);
+        productoRef =  FirebaseDatabase.getInstance().getReference().child("Ropa");
         firebaseStorage = FirebaseStorage.getInstance().getReference().child("Products");
         dialogProgress = new Dialog(this);
 
@@ -171,7 +171,6 @@ public class CreateActivity extends AppCompatActivity {
             category = productEntry.getCategory();
             otroCategoria = productEntry.getCategory();
             imgPortada = productEntry.getImgPortada();
-            productoRef =  FirebaseDatabase.getInstance().getReference().child("Ropa").child(category);
             cuentaFotosSubidas = productEntry.getUrl().size();
 
             for (ImagesList imagesList : productEntry.getUrl()){
@@ -208,12 +207,10 @@ public class CreateActivity extends AppCompatActivity {
                 if (!otroCategoria.equals("")){
                     if (otroCategoria.equals(nomeConsulta.get(position))){
                         category = nomeConsulta.get(position);
-                        productoRef =  FirebaseDatabase.getInstance().getReference().child("Ropa").child(category);
                     }
                 }else {
                     category = nomeConsulta.get(position);
                     System.out.println(category);
-                    productoRef =  FirebaseDatabase.getInstance().getReference().child("Ropa").child(category);
                 }
 
             }
