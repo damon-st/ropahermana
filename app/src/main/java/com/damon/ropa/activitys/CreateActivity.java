@@ -459,9 +459,8 @@ public class CreateActivity extends AppCompatActivity {
         String prices = precio.getText().toString();
         String cantidads = cantidad.getText().toString();
 
-        if (title.equals("") || descripcion.length()==0 ||TextUtils.isEmpty(prices) || TextUtils.isEmpty(cantidads) ||
-                TextUtils.isEmpty(marca.getText().toString())
-            ){
+        if (title.equals("") || descripcion.length()==0 ||TextUtils.isEmpty(prices) || TextUtils.isEmpty(cantidads))
+            {
             Toast.makeText(this, "LLena los campos porfavor", Toast.LENGTH_SHORT).show();
             return;
         }else {
