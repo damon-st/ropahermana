@@ -1,108 +1,42 @@
 {
   "project_info": {
-    "project_number": "927259856003",
-    "firebase_url": "https://catalogo-juegos-dd8ec.firebaseio.com",
-    "project_id": "catalogo-juegos-dd8ec",
-    "storage_bucket": "catalogo-juegos-dd8ec.appspot.com"
+    "project_number": "811099926785",
+    "firebase_url": "https://variedadesjastho-default-rtdb.firebaseio.com",
+    "project_id": "variedadesjastho",
+    "storage_bucket": "variedadesjastho.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:927259856003:android:e7bbc3a426b7ebebb99fb6",
-        "android_client_info": {
-          "package_name": "com.damon.catalogojuegos"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "927259856003-4tedeqajnvbk97c4b9ht6d9c58o2odk8.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.damon.catalogojuegos",
-            "certificate_hash": "0e5892a3dc73a06eeee15f6bcf643213e310a3df"
-          }
-        },
-        {
-          "client_id": "927259856003-o9u9s5rr2eirvc3m7t2biekcms1flcp1.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA7CJVysQlHv4Bqk6X_rcOcqYpAbsZAfEQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "927259856003-o9u9s5rr2eirvc3m7t2biekcms1flcp1.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:927259856003:android:1a90fce258118355b99fb6",
+        "mobilesdk_app_id": "1:811099926785:android:e85688d8e4260b662fab00",
         "android_client_info": {
           "package_name": "com.damon.ropa"
         }
       },
       "oauth_client": [
         {
-          "client_id": "927259856003-2ame50mg7ed6t8jedk2lb1rt8vu9uni7.apps.googleusercontent.com",
+          "client_id": "811099926785-p3mi329kefe86eqln181i7vu0qm31snc.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.damon.ropa",
-            "certificate_hash": "dfe69388c8e38498fbd7ee5a18ddb3fde5315afe"
+            "certificate_hash": "5c7377d55bf59ff3f32b96742983d63de9c26337"
           }
         },
         {
-          "client_id": "927259856003-o9u9s5rr2eirvc3m7t2biekcms1flcp1.apps.googleusercontent.com",
+          "client_id": "811099926785-7t8ltccfmbks2ufbf9r6rvn839d1l3l7.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA7CJVysQlHv4Bqk6X_rcOcqYpAbsZAfEQ"
+          "current_key": "AIzaSyAJKBAr5FhXSsN08gi4JEwn_g2fQ1xf2vg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "927259856003-o9u9s5rr2eirvc3m7t2biekcms1flcp1.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:927259856003:android:bc4884b57de47e9db99fb6",
-        "android_client_info": {
-          "package_name": "com.damon.videocompress"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "927259856003-o9u9s5rr2eirvc3m7t2biekcms1flcp1.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyA7CJVysQlHv4Bqk6X_rcOcqYpAbsZAfEQ"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "927259856003-o9u9s5rr2eirvc3m7t2biekcms1flcp1.apps.googleusercontent.com",
+              "client_id": "811099926785-7t8ltccfmbks2ufbf9r6rvn839d1l3l7.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
