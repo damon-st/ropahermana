@@ -45,7 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         progressDialog = new ProgressDialog(this);
-        progressDialog.setTitle("Iniciando session espera...");
+        progressDialog.setTitle("Iniciando sesion espera...");
         progressDialog.setCanceledOnTouchOutside(false);
 
         passowd = findViewById(R.id.password_edit_text);

@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/btn_sheet"
     >
 
     <TextView
+        android:id="@+id/titulo_filtro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
@@ -16,69 +18,24 @@
         android:fontFamily="@font/ubuntu_regular"
         android:text="Filtrar por seleccion"
         android:layout_margin="@dimen/_10sdp"
-        android:gravity="center_horizontal" />
+        android:gravity="center_horizontal"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
 
-    <LinearLayout
-        android:layout_margin="@dimen/_10sdp"
+    <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <RadioGroup
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:id="@+id/padre_group">
-
-
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColorPrimary"
-                android:text="Carteras"
-                android:id="@+id/carteras_rd"/>
-
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColorPrimary"
-                android:text="Pantalones"
-                android:id="@+id/pantalones"/>
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColorPrimary"
-                android:text="Para niñas"
-                android:id="@+id/ninas"/>
-
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColorPrimary"
-                android:text="Para niños"
-                android:id="@+id/ninos"/>
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColorPrimary"
-                android:text="Maquillaje"
-                android:id="@+id/maquillaje"/>
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColorPrimary"
-                android:text="Juguetes"
-                android:id="@+id/juguetes"/>
-            <RadioButton
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/textColorPrimary"
-                android:text="Variedades"
-                android:id="@+id/variedadess"/>
-
-
-        </RadioGroup>
-    </LinearLayout>
+        android:layout_height="match_parent"
+        android:id="@+id/rcy_category"
+        android:scrollbars="vertical"
+        android:layout_below="@+id/titulo_filtro"
+        android:layout_above="@+id/btn_buscar"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_buscar"
@@ -90,8 +47,12 @@
         android:textSize="@dimen/_18ssp"
         android:layout_margin="@dimen/_10sdp"
         android:fontFamily="@font/ubuntu_bold"
-        />
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true" />
 
 
 
-</LinearLayout>
+</RelativeLayout>

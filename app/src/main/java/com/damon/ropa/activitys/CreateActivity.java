@@ -204,14 +204,9 @@ public class CreateActivity extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 
-                if (!otroCategoria.equals("")){
-                    if (otroCategoria.equals(nomeConsulta.get(position))){
-                        category = nomeConsulta.get(position);
-                    }
-                }else {
-                    category = nomeConsulta.get(position);
-                    System.out.println(category);
-                }
+                category = nomeConsulta.get(position);
+                System.out.println(category);
+
 
             }
 
@@ -250,9 +245,7 @@ public class CreateActivity extends AppCompatActivity {
         String prices = precio.getText().toString();
         String cantidads = cantidad.getText().toString();
 
-        if (title.equals("") || descripcion.length()==0 ||TextUtils.isEmpty(prices) || TextUtils.isEmpty(cantidads) ||
-                TextUtils.isEmpty(marca.getText().toString())
-        ){
+        if (title.equals("") || descripcion.length()==0 ||TextUtils.isEmpty(prices) || TextUtils.isEmpty(cantidads)){
             Toast.makeText(this, "LLena los campos porfavor", Toast.LENGTH_SHORT).show();
             return;
         }

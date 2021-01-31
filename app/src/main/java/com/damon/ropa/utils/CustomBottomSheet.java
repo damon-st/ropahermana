@@ -12,11 +12,22 @@ import android.widget.RadioGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.damon.ropa.R;
+import com.damon.ropa.adapters.CategorySeleccionAdapter;
 import com.damon.ropa.interfaces.FiltrosI;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class CustomBottomSheet extends BottomSheetDialogFragment {
 
@@ -28,11 +39,17 @@ public class CustomBottomSheet extends BottomSheetDialogFragment {
 
     long desde,hasta;
     String selecion ="";
-    RadioGroup radioGroup;
 
-    public CustomBottomSheet(Context context,FiltrosI buscarClick) {
+    CategorySeleccionAdapter adapter;
+
+    List<String> list = new ArrayList<>();
+
+    RecyclerView recyclerView;
+
+    public CustomBottomSheet(Context context,FiltrosI buscarClick,List<String> list) {
         this.context = context;
         this.buscarClick = buscarClick;
+        this.list = list;
     }
 
     @Nullable
@@ -41,39 +58,17 @@ public class CustomBottomSheet extends BottomSheetDialogFragment {
 
         View view = inflater.inflate(R.layout.bottom_sheet_ordenar_fecha,container,false);
 
-        radioGroup = view.findViewById(R.id.padre_group);
+
         btn_buscar = view.findViewById(R.id.btn_buscar);
 
-        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup radioGroup, int i) {
-                switch (i){
-                    case R.id.carteras_rd:
-                        System.out.println("Holaaaaaaaaaaaaaaaaaaaaaaaaaa");
-                        selecion = "Carteras";
-                        break;
-                    case R.id.pantalones:
-                        selecion = "Palantalones";
-                        break;
-                    case R.id.ninas:
-                        selecion = "Niña";
-                        break;
 
-                    case R.id.ninos:
-                        selecion = "Niño";
-                        break;
-                    case R.id.maquillaje:
-                        selecion = "Maquillaje";
-                        break;
-                    case R.id.juguetes:
-                        selecion = "Juguetes";
-                        break;
-                    case R.id.variedadess:
-                        selecion = "Variedades";
-                        break;
-                }
-            }
-        });
+        recyclerView = view.findViewById(R.id.rcy_category);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext(),LinearLayoutManager.VERTICAL,false));
+        adapter = new CategorySeleccionAdapter(list,view.getContext());
+        recyclerView.setAdapter(adapter);
+
+        selecion = adapter.getCategoria();
 
         calendarioDesde();
         calendarioHasta();
@@ -81,6 +76,7 @@ public class CustomBottomSheet extends BottomSheetDialogFragment {
         btn_buscar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                selecion = adapter.getCategoria();
                 if (!TextUtils.isEmpty(selecion)){
                     buscarClick.onClikFiltrar(selecion);
                     dismiss();

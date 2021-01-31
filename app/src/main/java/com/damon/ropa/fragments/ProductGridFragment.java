@@ -105,7 +105,11 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
         });
         reference = FirebaseDatabase.getInstance().getReference().child("Ropa");
 
-        getProducsT(typo);
+        queryRef = FirebaseDatabase.getInstance().getReference().child("Categorias");
+
+//        getProducsT(typo);
+        getAllProducts();
+        getCategorias();
         recyclerView.setLayoutManager(gridLayoutManager);
          adapter = new StaggeredProductCardRecyclerViewAdapter(productEntryArrayList,getActivity());
         recyclerView.setAdapter(adapter);
@@ -195,8 +199,27 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
         return view;
     }
 
+    List<String> listCategorys = new ArrayList<>();
+    private void getCategorias() {
+        queryRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    for (DataSnapshot dataSnapshot: snapshot.getChildren()){
+                        listCategorys.add(dataSnapshot.child("id").getValue().toString());
+                    }
+                }
+            }
 
-     void   closeOrNoMenu(){
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+
+    void   closeOrNoMenu(){
         backdropShown = !backdropShown;
         animatorSet.removeAllListeners();
         animatorSet.end();
@@ -215,6 +238,106 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
 
 
     List<ImagesList> imagesUrls = new ArrayList<>();
+
+
+    void getAllProducts(){
+        if (productEntryArrayList.size()>0){
+            try {
+                productEntryArrayList.clear();
+                imagesUrls.clear();
+                adapter.notifyDataSetChanged();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+
+
+        reference.orderByKey().addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                if (dataSnapshot.exists()){
+                    String title = dataSnapshot.child("title").getValue().toString();
+                    double price = Double.parseDouble(dataSnapshot.child("price").getValue().toString());
+                    String descripcion = dataSnapshot.child("description").getValue().toString();
+                    int cantidad = Integer.parseInt(dataSnapshot.child("cantidad").getValue().toString());
+                    String id = dataSnapshot.child("id").getValue().toString();
+                    String marca = dataSnapshot.child("marca").getValue().toString();
+                    String category = dataSnapshot.child("category").getValue().toString();
+                    System.out.println(dataSnapshot.child(id).child("url"));
+                    String imgPortada = dataSnapshot.child("imgPortada").getValue().toString();
+                    if (dataSnapshot.child("url").getChildrenCount()>0){
+                        for (DataSnapshot urls : dataSnapshot.child("url").getChildren()){
+                            imagesUrls.add(new ImagesList(urls.getKey(),urls.getValue().toString()));
+                            System.out.println(urls.getValue().toString());
+                        }
+                    }
+
+                    ProductEntry productEntry = new ProductEntry(title,imagesUrls,price,descripcion,cantidad,id,marca,category,imgPortada);
+                    productEntryArrayList.add(productEntry);
+
+
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot dataSnapshot, @Nullable String previousChildName) {
+                if (dataSnapshot.exists()){
+                    String title = dataSnapshot.child("title").getValue().toString();
+                    double price = Double.parseDouble(dataSnapshot.child("price").getValue().toString());
+                    String descripcion = dataSnapshot.child("description").getValue().toString();
+                    int cantidad = Integer.parseInt(dataSnapshot.child("cantidad").getValue().toString());
+                    String id = dataSnapshot.child("id").getValue().toString();
+                    String marca = dataSnapshot.child("marca").getValue().toString();
+                    String category = dataSnapshot.child("category").getValue().toString();
+                    String imgPortada = dataSnapshot.child("imgPortada").getValue().toString();
+
+                    System.out.println(dataSnapshot.child(id).child("url"));
+                    if (dataSnapshot.child("url").getChildrenCount()>0){
+                        for (DataSnapshot urls : dataSnapshot.child("url").getChildren()){
+                            imagesUrls.add(new ImagesList(urls.getKey(),urls.getValue().toString()));
+                            System.out.println(urls.getValue().toString());
+                        }
+                    }
+                    String key = dataSnapshot.getKey();
+
+                    ProductEntry productEntry = new ProductEntry(title,imagesUrls,price,descripcion,cantidad,id,marca,category,imgPortada);
+                    int index = productEntryArrayList.indexOf(key);
+                    try {
+                        productEntryArrayList.set(index,productEntry);
+                        adapter.notifyDataSetChanged();
+                    }catch (Exception e){
+                        e.printStackTrace();
+                        ((Activity)getContext()).recreate();
+                    }
+                }
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot dataSnapshot) {
+                String key = dataSnapshot.getKey();
+                int index = productEntryArrayList.indexOf(key);
+                try {
+                    adapter.notifyItemRemoved(index);
+                }catch (Exception e){
+                    e.printStackTrace();
+                    getActivity().recreate();
+                }
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
 
     void getProducsT(String  typo){
 
@@ -399,7 +522,7 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
     }
 
     private void MostarDialog(){
-        CustomBottomSheet customBottomSheet = new CustomBottomSheet(getActivity(), this);
+        CustomBottomSheet customBottomSheet = new CustomBottomSheet(getActivity(), this,listCategorys);
         customBottomSheet.setCancelable(true);
         customBottomSheet.show(getFragmentManager(),customBottomSheet.getTag());
     }
