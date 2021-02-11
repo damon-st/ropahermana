@@ -4,4 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="transition">transition_example</string>
+    <string name="Ok">Si</string>
+    <string name="cancel">Cancelar</string>
+    <string name="permission_read_storage_rationale">Lectura de memoria necesaria para selecionar archivos</string>
 </resources>

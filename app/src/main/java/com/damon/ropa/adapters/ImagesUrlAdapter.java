@@ -1,6 +1,7 @@
 package com.damon.ropa.adapters;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -8,10 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityOptionsCompat;
+import androidx.core.view.ViewCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.damon.ropa.R;
+import com.damon.ropa.activitys.ImageViewerActivity;
 import com.damon.ropa.holder.ImagesUrl;
 import com.squareup.picasso.Picasso;
 
@@ -50,6 +54,13 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
                     notifyDataSetChanged();
                 }
             });
+
+            holder.img_url.setOnClickListener(v -> {
+                Intent intent  =new Intent(activity, ImageViewerActivity.class);
+                intent.putExtra("url",list.get(position));
+                ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,holder.img_url, ViewCompat.getTransitionName(holder.img_url));
+                activity.startActivity(intent,compat.toBundle());
+            });
         }else if (list.get(position).endsWith(".mp4")){
             holder.video_layout.setVisibility(View.VISIBLE);
 
@@ -60,10 +71,14 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
                 holder.videoPath.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
-                        mediaPlayer[position] = mp;
+                        mediaPlayer[0] = mp;
                         mp.setVolume(0, 0);
                         mp.start();
                         mp.setLooping(true);
+
+                        holder.time_duration.setVisibility(View.VISIBLE);
+
+                        holder.time_duration.setText(getTimeVideo(mp.getDuration()/1000));
 
                         float videoRatio = mp.getVideoWidth() / (float) mp.getVideoHeight();
                         float screenRatio = holder.videoPath.getWidth() / (float) holder.videoPath.getHeight();
@@ -81,18 +96,18 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
                 holder.voice_off.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (isOffAuido[position]) {
-                            if (mediaPlayer[position] != null) {
-                                mediaPlayer[position].setVolume(0.5f, 0.5f);
+                        if (isOffAuido[0]) {
+                            if (mediaPlayer[0] != null) {
+                                mediaPlayer[0].setVolume(0.5f, 0.5f);
                             }
                             holder.voice_off.setImageResource(R.drawable.ic_voice_on);
-                            isOffAuido[position] = false;
+                            isOffAuido[0] = false;
                         } else {
-                            if (mediaPlayer[position] != null) {
-                                mediaPlayer[position].setVolume(0, 0);
+                            if (mediaPlayer[0] != null) {
+                                mediaPlayer[0].setVolume(0, 0);
                             }
                             holder.voice_off.setImageResource(R.drawable.voice_off);
-                            isOffAuido[position] = true;
+                            isOffAuido[0] = true;
                         }
 
                     }
@@ -109,7 +124,13 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
         }
 
     }
-
+    private String getTimeVideo(int seconds){
+        int hr = seconds / 3600;
+        int rem = seconds % 3600;
+        int mn = rem / 60;
+        int sec = rem % 60;
+        return String.format("%02d",hr)+  ":" + String.format("%02d",mn)+ ":" + String.format("%02d",sec);
+    }
     @Override
     public int getItemCount() {
         return list.size();

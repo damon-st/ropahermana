@@ -76,6 +76,10 @@ public class ImagesProductsAdapter extends RecyclerView.Adapter<ImagesUrl> {
                         mp.start();
                         mp.setLooping(true);
 
+                        holder.time_duration.setVisibility(View.VISIBLE);
+
+                        holder.time_duration.setText(getTimeVideo(mp.getDuration()/1000));
+
                         float videoRatio = mp.getVideoWidth() / (float) mp.getVideoHeight();
                         float screenRatio = holder.videoPath.getWidth() / (float) holder.videoPath.getHeight();
 
@@ -116,6 +120,14 @@ public class ImagesProductsAdapter extends RecyclerView.Adapter<ImagesUrl> {
         }
 
 
+    }
+
+    private String getTimeVideo(int seconds){
+        int hr = seconds / 3600;
+        int rem = seconds % 3600;
+        int mn = rem / 60;
+        int sec = rem % 60;
+        return String.format("%02d",hr)+  ":" + String.format("%02d",mn)+ ":" + String.format("%02d",sec);
     }
 
     @Override

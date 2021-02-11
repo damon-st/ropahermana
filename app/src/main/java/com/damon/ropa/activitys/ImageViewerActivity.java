@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.damon.ropa.R;
 import com.squareup.picasso.Picasso;
 
@@ -39,7 +40,8 @@ public class ImageViewerActivity extends AppCompatActivity {
 
         if (intent !=null && intent.getExtras() !=null){
             url = intent.getStringExtra("url");
-            Picasso.get().load(url).into(imageView);
+            //Picasso.get().load(url).into(imageView);
+            Glide.with(this).load(url).into(imageView);
         }
     }
 }

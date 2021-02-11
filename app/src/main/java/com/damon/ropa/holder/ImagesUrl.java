@@ -3,6 +3,7 @@ package com.damon.ropa.holder;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.annotation.NonNull;
@@ -15,6 +16,7 @@ public class ImagesUrl  extends RecyclerView.ViewHolder {
    public ImageView img_url,delete_img,delete_video,voice_off;
    public FrameLayout video_layout, image_layout;
    public VideoView videoPath;
+   public TextView time_duration;
 
     public ImagesUrl(@NonNull View itemView) {
         super(itemView);
@@ -27,5 +29,6 @@ public class ImagesUrl  extends RecyclerView.ViewHolder {
         videoPath = itemView.findViewById(R.id.video_path);
         delete_video = itemView.findViewById(R.id.delete_video);
         voice_off = itemView.findViewById(R.id.ic_voice);
+        time_duration = itemView.findViewById(R.id.time_video);
     }
 }

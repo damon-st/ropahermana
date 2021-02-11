@@ -2,6 +2,7 @@ package com.damon.ropa.activitys;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -65,6 +67,7 @@ import id.zelory.compressor.Compressor;
 
 public class CreateActivity extends AppCompatActivity {
 
+    private static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;
     ImageView camera,video_search;
     Spinner categoriaSpinner;
     ArrayAdapter<String> adapter;
@@ -147,12 +150,16 @@ public class CreateActivity extends AppCompatActivity {
 
 
         video_search.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setAction(Intent.ACTION_GET_CONTENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("video/*");
-            startActivityForResult(intent.createChooser(intent,"Buscar Video"),400);
 
+            if (ActivityCompat.checkSelfPermission(CreateActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                requestPermission(Manifest.permission.READ_EXTERNAL_STORAGE, getString(R.string.permission_read_storage_rationale), REQUEST_STORAGE_READ_ACCESS_PERMISSION);
+            }else {
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                intent.addCategory(Intent.CATEGORY_OPENABLE);
+                intent.setType("video/*");
+                startActivityForResult(intent.createChooser(intent,"Buscar Video"),400);
+            }
         });
 
 
@@ -741,6 +748,24 @@ public class CreateActivity extends AppCompatActivity {
 
     }
 
+    private void requestPermission(final String permission, String rationale, final int requestCode) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(this, permission)) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Permiso Necesario");
+            builder.setMessage(rationale);
+            builder.setPositiveButton(getString(R.string.Ok), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ActivityCompat.requestPermissions(CreateActivity.this, new String[]{permission}, requestCode);
+                }
+            });
+            builder.setNegativeButton(getString(R.string.cancel), null);
+            builder.show();
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{permission}, requestCode);
+        }
+    }
+
     private void ShowProgress(){
         dialogProgress.setContentView(R.layout.progress_dialog);
         dialogProgress.setCanceledOnTouchOutside(false);
@@ -761,5 +786,22 @@ public class CreateActivity extends AppCompatActivity {
         MediaPlayer mp = MediaPlayer.create(this,uriOfFile);
         int duration = mp.getDuration();
         return  duration;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case REQUEST_STORAGE_READ_ACCESS_PERMISSION:
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "Gracias aora ya puedes  e enviar los videos", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(this, "Por favor conseda los permisos", Toast.LENGTH_SHORT).show();
+                }
+                break;
+        }
+
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+
     }
 }

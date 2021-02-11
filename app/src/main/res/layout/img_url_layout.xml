@@ -43,6 +43,7 @@
         android:background="@android:color/black"
         >
 
+
         <VideoView
             android:layout_width="match_parent"
             android:layout_height="500dp"
@@ -68,6 +69,20 @@
             app:tint="@android:color/white"
             android:layout_gravity="start"
             android:layout_margin="10dp"
+            />
+
+
+        <TextView
+            android:visibility="gone"
+            android:id="@+id/time_video"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_14ssp"
+            android:textColor="@color/white"
+            android:text="00:00"
+            android:layout_gravity="bottom"
+            android:gravity="end"
+            android:layout_margin="@dimen/_10sdp"
             />
 
     </FrameLayout>

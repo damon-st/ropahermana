@@ -122,10 +122,16 @@ public class TrimmingVideo extends AppCompatActivity  implements OnTrimVideoList
     }
 
     private void sendVideo(Uri fromFile) {
-        Intent intent = getIntent();
-        intent.putExtra("path",fromFile.toString());
-        setResult(Activity.RESULT_OK,intent);
-        onBackPressed();
+        new Thread(){
+            @Override
+            public void run() {
+                super.run();
+                Intent intent = getIntent();
+                intent.putExtra("path",fromFile.toString());
+                setResult(Activity.RESULT_OK,intent);
+                finish();
+            }
+        }.start();
     }
 
     @Override
