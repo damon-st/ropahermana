@@ -14,6 +14,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ import com.damon.ropa.adapters.ImagesUrlAdapter;
 import com.damon.ropa.models.CatgoriasM;
 import com.damon.ropa.models.ImagesList;
 import com.damon.ropa.models.ProductEntry;
+import com.damon.cortarvideo.utils.FileUtils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -63,7 +65,7 @@ import id.zelory.compressor.Compressor;
 
 public class CreateActivity extends AppCompatActivity {
 
-    ImageView camera;
+    ImageView camera,video_search;
     Spinner categoriaSpinner;
     ArrayAdapter<String> adapter;
     private List<String> nomeConsulta = new ArrayList<String>();
@@ -95,7 +97,7 @@ public class CreateActivity extends AppCompatActivity {
     int cuentaFotosSubidas;
     String otroCategoria = "";
 
-    String imgPortada = "";
+    String imgPortada = "https://firebasestorage.googleapis.com/v0/b/variedadesjastho.appspot.com/o/jastho.jpeg?alt=media&token=e19dcba0-01c5-4fec-ab05-dfe3abaa7248";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -110,6 +112,7 @@ public class CreateActivity extends AppCompatActivity {
             }
         }
 
+        video_search = findViewById(R.id.video_search);
         categoriaSpinner = findViewById(R.id.categirias_spinner);
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, nomeConsulta);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -143,6 +146,14 @@ public class CreateActivity extends AppCompatActivity {
         camera.setOnClickListener(v -> CropImage.activity().setGuidelines(CropImageView.Guidelines.ON).start(this));
 
 
+        video_search.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setAction(Intent.ACTION_GET_CONTENT);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            intent.setType("video/*");
+            startActivityForResult(intent.createChooser(intent,"Buscar Video"),400);
+
+        });
 
 
 
@@ -285,65 +296,116 @@ public class CreateActivity extends AppCompatActivity {
 
 
                 String addChild = UUID.randomUUID().toString();
-                filePath = firebaseStorage.child(addChild + "." + "png");
 
-                System.out.println("filepath" + filePath);
+                if (url_list.get(i).endsWith(".jpeg")||url_list.get(i).endsWith(".jpg")||
+                   url_list.get(i).endsWith(".png")){
+
+                    filePath = firebaseStorage.child(addChild + "." + "png");
+
+                    System.out.println("filepath" + filePath);
 //        final File file = new File(SiliCompressor.with(CrearVentaActivity.this)
 //        .compress(FileUtils.getPath(CrearVentaActivity.this,imgURI),
 //                new File(CrearVentaActivity.this.getCacheDir(),"temp")));
 //
 //        Uri uri = Uri.fromFile(file);
 
-                File tumb_filePath = new File(url_list.get(i));
+                    File tumb_filePath = new File(url_list.get(i));
 
 
-                try {
-                    bitmap = new Compressor(this)
-                            .setMaxWidth(400)
-                            .setMaxHeight(400)
-                            .setQuality(90)
-                            .compressToBitmap(tumb_filePath);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    try {
+                        bitmap = new Compressor(this)
+                                .setMaxWidth(400)
+                                .setMaxHeight(400)
+                                .setQuality(90)
+                                .compressToBitmap(tumb_filePath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+                    final byte[] thumb_byte = byteArrayOutputStream.toByteArray();
+
+
+                    if (textoProgress != null) textoProgress.setText("Imagenes por subir " + i);
+
+                    firebaseStorage.child(addChild + "." + "png").putBytes(thumb_byte).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()){
+                                firebaseStorage.child(addChild + "." + "png").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        System.out.println(task.getResult().toString());
+                                        listaNueva.add(task.getResult().toString().toString());
+
+
+
+                                        totalMEdia++;
+                                        if (textoProgress !=null) textoProgress.setText("Imagenes subidas " + totalMEdia );
+
+                                        if (listaNueva.size() == url_list.size())
+                                            updateVenta(hashMap);
+                                    }
+                                });
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //progressDialog.dismiss();
+                            if (textoProgress != null) textoProgress.setText("Error " + e.getMessage());
+                            dialogProgress.setCanceledOnTouchOutside(true);
+                            dialogProgress.setCancelable(true);
+                        }
+                    });
+
+                }else if (url_list.get(i).endsWith(".mp4")){
+
+
+                    filePath = firebaseStorage.child(addChild + "." + "mp4");
+
+                    System.out.println("filepath" + filePath);
+
+
+
+                    if (textoProgress != null) textoProgress.setText("Video por subir " + i);
+
+                    firebaseStorage.child(addChild + "." + "mp4").putFile(Uri.parse(url_list.get(i))).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()){
+                                firebaseStorage.child(addChild + "." + "mp4").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        System.out.println(task.getResult().toString());
+                                        listaNueva.add(task.getResult().toString().toString());
+
+
+
+                                        totalMEdia++;
+                                        if (textoProgress !=null) textoProgress.setText("Video subidos " + totalMEdia );
+
+                                        if (listaNueva.size() == url_list.size())
+                                            updateVenta(hashMap);
+                                    }
+                                });
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //progressDialog.dismiss();
+                            if (textoProgress != null) textoProgress.setText("Error " + e.getMessage());
+                            dialogProgress.setCanceledOnTouchOutside(true);
+                            dialogProgress.setCancelable(true);
+                        }
+                    });
+
+
                 }
 
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
-                final byte[] thumb_byte = byteArrayOutputStream.toByteArray();
 
-
-                if (textoProgress != null) textoProgress.setText("Imagenes por subir " + i);
-
-                firebaseStorage.child(addChild + "." + "png").putBytes(thumb_byte).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()){
-                            firebaseStorage.child(addChild + "." + "png").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    System.out.println(task.getResult().toString());
-                                    listaNueva.add(task.getResult().toString().toString());
-
-
-
-                                    totalMEdia++;
-                                    if (textoProgress !=null) textoProgress.setText("Imagenes subidas " + totalMEdia );
-
-                                    if (listaNueva.size() == url_list.size())
-                                        updateVenta(hashMap);
-                                }
-                            });
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //progressDialog.dismiss();
-                        if (textoProgress != null) textoProgress.setText("Error " + e.getMessage());
-                        dialogProgress.setCanceledOnTouchOutside(true);
-                        dialogProgress.setCancelable(true);
-                    }
-                });
             }
 
         }else {
@@ -430,8 +492,22 @@ public class CreateActivity extends AppCompatActivity {
             System.out.println(url);
             url_list.add(url.getPath());
             imagesUrlAdapter.notifyDataSetChanged();
+        }else if (requestCode == 400 && resultCode == RESULT_OK){
+            Uri uri = data.getData();
+            Intent intent = new Intent(CreateActivity.this,TrimmingVideo.class);
+            intent.putExtra("video_path", FileUtils.getPath(this,uri));
+            intent.putExtra("duration",getMediaDuration(uri));
+            startActivityForResult(intent,200);
+        }else if (requestCode == 200 ){
+            if ( resultCode == RESULT_OK){
+                String path = data.getStringExtra("path");
+                url_list.add(path);
+                imagesUrlAdapter.notifyDataSetChanged();
+            }
         }
     }
+
+
 
 
     int totalMEdia = 0;
@@ -495,71 +571,126 @@ public class CreateActivity extends AppCompatActivity {
 
 
                 String addChild = UUID.randomUUID().toString();
-                filePath = firebaseStorage.child(addChild + "." + "png");
 
-                System.out.println("filepath" + filePath);
+                if (url_list.get(i).endsWith(".jpeg")||url_list.get(i).endsWith(".jpg")||
+                        url_list.get(i).endsWith(".png")) {
+
+                    filePath = firebaseStorage.child(addChild + "." + "png");
+
+                    System.out.println("filepath" + filePath);
 //        final File file = new File(SiliCompressor.with(CrearVentaActivity.this)
 //        .compress(FileUtils.getPath(CrearVentaActivity.this,imgURI),
 //                new File(CrearVentaActivity.this.getCacheDir(),"temp")));
 //
 //        Uri uri = Uri.fromFile(file);
 
-                File tumb_filePath = new File(url_list.get(i));
+                    File tumb_filePath = new File(url_list.get(i));
 
 
-                try {
-                    bitmap = new Compressor(this)
-                            .setMaxWidth(400)
-                            .setMaxHeight(400)
-                            .setQuality(90)
-                            .compressToBitmap(tumb_filePath);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                    try {
+                        bitmap = new Compressor(this)
+                                .setMaxWidth(400)
+                                .setMaxHeight(400)
+                                .setQuality(90)
+                                .compressToBitmap(tumb_filePath);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
+                    final byte[] thumb_byte = byteArrayOutputStream.toByteArray();
+
+
+                    if (textoProgress != null) textoProgress.setText("Imagenes por subir " + i);
+
+                    firebaseStorage.child(addChild + "." + "png").putBytes(thumb_byte).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()){
+                                firebaseStorage.child(addChild + "." + "png").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        System.out.println(task.getResult().toString());
+                                        listaNueva.add(task.getResult().toString().toString());
+
+
+
+                                        totalMEdia++;
+                                        if (textoProgress !=null) textoProgress.setText("Imagenes subidas " + totalMEdia );
+
+                                        imgPortada = listaNueva.get(0);
+                                        if (listaNueva.size() == url_list.size())
+                                            updateVentaDataBase(ventaRef,hashMap);
+                                    }
+                                });
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //progressDialog.dismiss();
+                            if (textoProgress != null) textoProgress.setText("Error " + e.getMessage());
+                            dialogProgress.setCanceledOnTouchOutside(true);
+                            dialogProgress.setCancelable(true);
+                        }
+                    });
+
+
+                }else if (url_list.get(i).endsWith(".mp4")){
+
+
+                    filePath = firebaseStorage.child(addChild + "." + "mp4");
+
+                    System.out.println("filepath" + filePath);
+//        final File file = new File(SiliCompressor.with(CrearVentaActivity.this)
+//        .compress(FileUtils.getPath(CrearVentaActivity.this,imgURI),
+//                new File(CrearVentaActivity.this.getCacheDir(),"temp")));
+//
+//        Uri uri = Uri.fromFile(file);
+
+
+
+                    if (textoProgress != null) textoProgress.setText("Video por subir " + i);
+
+                    firebaseStorage.child(addChild + "." + "mp4").putFile(Uri.parse(url_list.get(i))).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()){
+                                firebaseStorage.child(addChild + "." + "mp4").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Uri> task) {
+                                        System.out.println(task.getResult().toString());
+                                        listaNueva.add(task.getResult().toString().toString());
+
+
+
+                                        totalMEdia++;
+                                        if (textoProgress !=null) textoProgress.setText("Video subidos " + totalMEdia );
+
+                                        if (listaNueva.size() == url_list.size())
+                                            updateVentaDataBase(ventaRef,hashMap);
+                                    }
+                                });
+                            }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            //progressDialog.dismiss();
+                            if (textoProgress != null) textoProgress.setText("Error " + e.getMessage());
+                            dialogProgress.setCanceledOnTouchOutside(true);
+                            dialogProgress.setCancelable(true);
+                        }
+                    });
                 }
 
-                ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 90, byteArrayOutputStream);
-                final byte[] thumb_byte = byteArrayOutputStream.toByteArray();
 
-
-                if (textoProgress != null) textoProgress.setText("Imagenes por subir " + i);
-
-                firebaseStorage.child(addChild + "." + "png").putBytes(thumb_byte).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if (task.isSuccessful()){
-                            firebaseStorage.child(addChild + "." + "png").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Uri> task) {
-                                    System.out.println(task.getResult().toString());
-                                    listaNueva.add(task.getResult().toString().toString());
-
-
-
-                                    totalMEdia++;
-                                    if (textoProgress !=null) textoProgress.setText("Imagenes subidas " + totalMEdia );
-
-                                    imgPortada = listaNueva.get(0);
-                                    if (listaNueva.size() == url_list.size())
-                                        updateVentaDataBase(ventaRef,hashMap);
-                                }
-                            });
-                        }
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        //progressDialog.dismiss();
-                        if (textoProgress != null) textoProgress.setText("Error " + e.getMessage());
-                        dialogProgress.setCanceledOnTouchOutside(true);
-                        dialogProgress.setCancelable(true);
-                    }
-                });
             }
 
         }else {
-            hashMap.put("imgPortada","https://firebasestorage.googleapis.com/v0/b/ventadiamantes-329aa.appspot.com/o/Facturas%2Fae11c5a5-10ad-4c31-ad66-c1478032ad80.jpg?alt=media&token=a5dbc974-eec9-4653-a0f2-cf83ec744691");
-            hashMap.put("url", "https://firebasestorage.googleapis.com/v0/b/ventadiamantes-329aa.appspot.com/o/Facturas%2Fae11c5a5-10ad-4c31-ad66-c1478032ad80.jpg?alt=media&token=a5dbc974-eec9-4653-a0f2-cf83ec744691");
+            hashMap.put("imgPortada",imgPortada);
+            hashMap.put("url", imgPortada);
 
             updateVentaDataBase(ventaRef,hashMap);
         }
@@ -624,5 +755,11 @@ public class CreateActivity extends AppCompatActivity {
     public void onBackPressed() {
         super.onBackPressed();
         finish();
+    }
+
+    private int  getMediaDuration(Uri uriOfFile)  {
+        MediaPlayer mp = MediaPlayer.create(this,uriOfFile);
+        int duration = mp.getDuration();
+        return  duration;
     }
 }

@@ -1,2 +1,3 @@
+include ':cortarvideo'
 include ':app'
 rootProject.name = "Ropa"
