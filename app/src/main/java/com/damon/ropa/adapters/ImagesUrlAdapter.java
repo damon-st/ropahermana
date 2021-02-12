@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +45,7 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
         holder.image_layout.setVisibility(View.GONE);
         holder.video_layout.setVisibility(View.GONE);
         if (list.get(position).endsWith(".jpg")|| list.get(position).endsWith(".jpeg") |
-                list.get(position).endsWith(".png")){
+                list.get(position).endsWith(".png") || list.get(position).contains(".png")){
             holder.image_layout.setVisibility(View.VISIBLE);
             Glide.with(activity).load(list.get(position)).into(holder.img_url);
             holder.delete_img.setOnClickListener(new View.OnClickListener() {
@@ -61,18 +62,34 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
                 ActivityOptionsCompat compat = ActivityOptionsCompat.makeSceneTransitionAnimation(activity,holder.img_url, ViewCompat.getTransitionName(holder.img_url));
                 activity.startActivity(intent,compat.toBundle());
             });
-        }else if (list.get(position).endsWith(".mp4")){
+        }else if (list.get(position).endsWith(".mp4") || list.get(position).contains(".mp4")){
             holder.video_layout.setVisibility(View.VISIBLE);
+//            holder.progressVideo.setVisibility(View.GONE);
 
             try {
                 final MediaPlayer[] mediaPlayer = {null};
                 holder.videoPath.setVideoPath(list.get(position));
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    holder.videoPath.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                        @Override
+                        public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                            if (what == mp.MEDIA_INFO_BUFFERING_START){
+                                holder.progressVideo.setVisibility(View.VISIBLE);
+                            }else if (what == mp.MEDIA_INFO_BUFFERING_END){
+                                holder.progressVideo.setVisibility(View.GONE);
+                            }
+                            return false;
+                        }
+                    });
+                }
 
                 holder.videoPath.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
                         mediaPlayer[0] = mp;
                         mp.setVolume(0, 0);
+                        holder.progressVideo.setVisibility(View.GONE);
                         mp.start();
                         mp.setLooping(true);
 
@@ -96,19 +113,24 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
                 holder.voice_off.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (isOffAuido[0]) {
-                            if (mediaPlayer[0] != null) {
-                                mediaPlayer[0].setVolume(0.5f, 0.5f);
+                        try {
+                            if (isOffAuido[0]) {
+                                if (mediaPlayer[0] != null) {
+                                    mediaPlayer[0].setVolume(0.5f, 0.5f);
+                                }
+                                holder.voice_off.setImageResource(R.drawable.ic_voice_on);
+                                isOffAuido[0] = false;
+                            } else {
+                                if (mediaPlayer[0] != null) {
+                                    mediaPlayer[0].setVolume(0, 0);
+                                }
+                                holder.voice_off.setImageResource(R.drawable.voice_off);
+                                isOffAuido[0] = true;
                             }
-                            holder.voice_off.setImageResource(R.drawable.ic_voice_on);
-                            isOffAuido[0] = false;
-                        } else {
-                            if (mediaPlayer[0] != null) {
-                                mediaPlayer[0].setVolume(0, 0);
-                            }
-                            holder.voice_off.setImageResource(R.drawable.voice_off);
-                            isOffAuido[0] = true;
+                        }catch (IllegalStateException e){
+                            e.printStackTrace();
                         }
+
 
                     }
                 });
@@ -124,6 +146,28 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
         }
 
     }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ImagesUrl holder) {
+        super.onViewAttachedToWindow(holder);
+        //Se llama cuando una vista creada por este adaptador se ha adjuntado a una ventana.
+        System.out.println("onViewAttachedToWindow" + holder);
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ImagesUrl holder) {
+        super.onViewDetachedFromWindow(holder);
+        //se llama cuando una vista creada por este adaptador se ha separado de su ventana.
+        System.out.println("onViewDetachedFromWindow" + holder.getItemId());
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull ImagesUrl holder) {
+        super.onViewRecycled(holder);
+        //se llama cuando se recicla
+        System.out.println("onViewRecycled" +holder);
+    }
+
     private String getTimeVideo(int seconds){
         int hr = seconds / 3600;
         int rem = seconds % 3600;

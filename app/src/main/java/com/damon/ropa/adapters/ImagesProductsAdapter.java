@@ -3,6 +3,7 @@ package com.damon.ropa.adapters;
 import android.app.Activity;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.damon.ropa.models.ImagesList;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class ImagesProductsAdapter extends RecyclerView.Adapter<ImagesUrl> {
     List<ImagesList> imagesLists ;
@@ -63,16 +65,46 @@ public class ImagesProductsAdapter extends RecyclerView.Adapter<ImagesUrl> {
         }else if (imagesUrl.getUrl().contains(".mp4")){
             holder.video_layout.setVisibility(View.VISIBLE);
             holder.delete_video.setVisibility(View.GONE);
+//            holder.progressVideo.setVisibility(View.GONE);
 
             try {
                 final MediaPlayer[] mediaPlayer = {null};
-                holder.videoPath.setVideoPath(imagesUrl.getUrl());
+
+
+                Executors.newSingleThreadExecutor().submit(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            holder.videoPath.setVideoPath(imagesUrl.getUrl());
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    holder.videoPath.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                        @Override
+                        public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                            if (what == mp.MEDIA_INFO_BUFFERING_START){
+                                holder.progressVideo.setVisibility(View.VISIBLE);
+                            }else if (what == mp.MEDIA_INFO_BUFFERING_END){
+                                holder.progressVideo.setVisibility(View.GONE);
+                            }
+                            return false;
+                        }
+                    });
+                }
+
+
 
                 holder.videoPath.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                     @Override
                     public void onPrepared(MediaPlayer mp) {
                         mediaPlayer[0] = mp;
                         mp.setVolume(0, 0);
+                        holder.progressVideo.setVisibility(View.GONE);
                         mp.start();
                         mp.setLooping(true);
 
@@ -92,23 +124,29 @@ public class ImagesProductsAdapter extends RecyclerView.Adapter<ImagesUrl> {
                     }
                 });
 
+
                 final boolean[] isOffAuido = {true};
                 holder.voice_off.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        if (isOffAuido[0]) {
-                            if (mediaPlayer[0] != null) {
-                                mediaPlayer[0].setVolume(0.5f, 0.5f);
+                        try {
+                            if (isOffAuido[0]) {
+                                if (mediaPlayer[0] != null) {
+                                    mediaPlayer[0].setVolume(0.5f, 0.5f);
+                                }
+                                holder.voice_off.setImageResource(R.drawable.ic_voice_on);
+                                isOffAuido[0] = false;
+                            } else {
+                                if (mediaPlayer[0] != null) {
+                                    mediaPlayer[0].setVolume(0, 0);
+                                }
+                                holder.voice_off.setImageResource(R.drawable.voice_off);
+                                isOffAuido[0] = true;
                             }
-                            holder.voice_off.setImageResource(R.drawable.ic_voice_on);
-                            isOffAuido[0] = false;
-                        } else {
-                            if (mediaPlayer[0] != null) {
-                                mediaPlayer[0].setVolume(0, 0);
-                            }
-                            holder.voice_off.setImageResource(R.drawable.voice_off);
-                            isOffAuido[0] = true;
+                        }catch (IllegalStateException e){
+                            e.printStackTrace();
                         }
+
 
                     }
                 });

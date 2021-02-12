@@ -135,6 +135,7 @@ public class CreateActivity extends AppCompatActivity {
         imagesUrlAdapter = new ImagesUrlAdapter(url_list,this);
         imgRecycler.setAdapter(imagesUrlAdapter);
 
+
         btn_create =findViewById(R.id.crear_prod);
         camera =  findViewById(R.id.camera);
         titulo = findViewById(R.id.titulo_prod);
