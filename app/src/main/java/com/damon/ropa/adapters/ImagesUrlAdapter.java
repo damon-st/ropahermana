@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.damon.ropa.R;
 import com.damon.ropa.activitys.ImageViewerActivity;
 import com.damon.ropa.holder.ImagesUrl;
+import com.damon.ropa.interfaces.VideoPlaying;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,17 +28,19 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
 
     List<String> list = new ArrayList<>();
     Activity activity;
+    private VideoPlaying videoPlaying;
 
-    public ImagesUrlAdapter(List<String> list, Activity activity) {
+    public ImagesUrlAdapter(List<String> list, Activity activity,VideoPlaying videoPlaying) {
         this.list = list;
         this.activity = activity;
+        this.videoPlaying = videoPlaying;
     }
 
     @NonNull
     @Override
     public ImagesUrl onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(activity).inflate(R.layout.img_url_layout,parent,false);
-        return new ImagesUrl(view);
+        return new ImagesUrl(view,videoPlaying);
     }
 
     @Override
@@ -68,6 +71,10 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
 
             //SetVideo(holder, position);
             holder.setVideo(activity.getApplication(),list.get(position));
+
+            holder.expan_video.setOnClickListener(v -> {
+                holder.VideoActivity(activity,list.get(position));
+            });
         }
 
     }
@@ -164,6 +171,7 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
         super.onViewDetachedFromWindow(holder);
         //se llama cuando una vista creada por este adaptador se ha separado de su ventana.
         System.out.println("onViewDetachedFromWindow" + holder.getItemId());
+        holder.pararVideo();
     }
 
     @Override

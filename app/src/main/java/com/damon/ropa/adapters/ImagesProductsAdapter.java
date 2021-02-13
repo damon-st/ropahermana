@@ -7,6 +7,7 @@ import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.ActivityOptionsCompat;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.damon.ropa.R;
 import com.damon.ropa.activitys.ImageViewerActivity;
 import com.damon.ropa.holder.ImagesUrl;
+import com.damon.ropa.interfaces.VideoPlaying;
 import com.damon.ropa.models.ImagesList;
 import com.squareup.picasso.Picasso;
 
@@ -27,16 +29,19 @@ public class ImagesProductsAdapter extends RecyclerView.Adapter<ImagesUrl> {
 
     Activity activity;
 
-    public ImagesProductsAdapter(List<ImagesList> imagesLists, Activity activity) {
+    private VideoPlaying videoPlaying;
+
+    public ImagesProductsAdapter(List<ImagesList> imagesLists, Activity activity,VideoPlaying videoPlaying) {
         this.imagesLists = imagesLists;
         this.activity = activity;
+        this.videoPlaying = videoPlaying;
     }
 
     @NonNull
     @Override
     public ImagesUrl onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(activity).inflate(R.layout.img_url_layout,parent,false);
-        return new ImagesUrl(view);
+        return new ImagesUrl(view,videoPlaying);
     }
 
     @Override
@@ -70,10 +75,15 @@ public class ImagesProductsAdapter extends RecyclerView.Adapter<ImagesUrl> {
 
             //SetVideo(holder, imagesUrl);
             holder.setVideo(activity.getApplication(),imagesLists.get(position).getUrl());
+
+            holder.expan_video.setOnClickListener(v -> {
+                holder.VideoActivity(activity,imagesUrl.getUrl());
+            });
         }
 
 
     }
+
 
     private void SetVideo(@NonNull ImagesUrl holder, ImagesList imagesUrl) {
         try {
@@ -164,6 +174,29 @@ public class ImagesProductsAdapter extends RecyclerView.Adapter<ImagesUrl> {
         }catch (Exception e){
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void onViewAttachedToWindow(@NonNull ImagesUrl holder) {
+        super.onViewAttachedToWindow(holder);
+        //Se llama cuando una vista creada por este adaptador se ha adjuntado a una ventana.
+        System.out.println("onViewAttachedToWindow" + holder);
+//        holder.continuarVideo();
+    }
+
+    @Override
+    public void onViewDetachedFromWindow(@NonNull ImagesUrl holder) {
+        super.onViewDetachedFromWindow(holder);
+        //se llama cuando una vista creada por este adaptador se ha separado de su ventana.
+        System.out.println("onViewDetachedFromWindow" + holder.getItemId());
+        holder.pararVideo();
+    }
+
+    @Override
+    public void onViewRecycled(@NonNull ImagesUrl holder) {
+        super.onViewRecycled(holder);
+        //se llama cuando se recicla
+        System.out.println("onViewRecycled" +holder);
     }
 
     private String getTimeVideo(int seconds){

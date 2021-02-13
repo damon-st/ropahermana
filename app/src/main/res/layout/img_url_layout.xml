@@ -68,9 +68,20 @@
             android:layout_height="50dp"
             android:src="@drawable/ic_delete"
             app:tint="@android:color/holo_red_dark"
+            android:layout_gravity="top"
+            android:layout_margin="10dp"
+            />
+
+        <ImageView
+            android:visibility="gone"
+            android:id="@+id/video_expan"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_expan_video"
             android:layout_gravity="end"
             android:layout_margin="10dp"
             />
+
         <ImageView
             android:id="@+id/ic_voice"
             android:layout_width="50dp"

@@ -8,6 +8,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
@@ -32,10 +33,13 @@ import android.widget.Toast;
 
 import com.damon.ropa.R;
 import com.damon.ropa.adapters.ImagesUrlAdapter;
+import com.damon.ropa.interfaces.VideoPlaying;
 import com.damon.ropa.models.CatgoriasM;
 import com.damon.ropa.models.ImagesList;
 import com.damon.ropa.models.ProductEntry;
 import com.damon.cortarvideo.utils.FileUtils;
+import com.damon.ropa.utils.SnapHelperOneByOne;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -65,7 +69,7 @@ import java.util.UUID;
 
 import id.zelory.compressor.Compressor;
 
-public class CreateActivity extends AppCompatActivity {
+public class CreateActivity extends AppCompatActivity  implements VideoPlaying {
 
     private static final int REQUEST_STORAGE_READ_ACCESS_PERMISSION = 101;
     ImageView camera,video_search;
@@ -132,7 +136,11 @@ public class CreateActivity extends AppCompatActivity {
         imgRecycler.setHasFixedSize(true);
         linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         imgRecycler.setLayoutManager(linearLayoutManager);
-        imagesUrlAdapter = new ImagesUrlAdapter(url_list,this);
+
+        LinearSnapHelper snapHelper = new SnapHelperOneByOne();
+        snapHelper.attachToRecyclerView(imgRecycler);
+
+        imagesUrlAdapter = new ImagesUrlAdapter(url_list,this,this::isPlaying);
         imgRecycler.setAdapter(imagesUrlAdapter);
 
 
@@ -780,6 +788,10 @@ public class CreateActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        if (exoPlayer !=null){
+            exoPlayer.release();
+            exoPlayer = null;
+        }
         finish();
     }
 
@@ -805,4 +817,14 @@ public class CreateActivity extends AppCompatActivity {
 
 
     }
+
+    SimpleExoPlayer exoPlayer;
+    @Override
+    public void isPlaying(SimpleExoPlayer simpleExoPlayer, boolean isplaying) {
+        if (simpleExoPlayer != null ){
+            exoPlayer = simpleExoPlayer;
+        }
+    }
+
+
 }

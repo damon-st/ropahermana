@@ -17,9 +17,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Shrine">
-        <activity android:name=".activitys.TrimmingVideo"
-            android:screenOrientation="portrait"
+        <activity android:name=".activitys.PlayVideoActivity"
+            android:configChanges="screenSize|orientation"
             ></activity>
+        <activity
+            android:name=".activitys.TrimmingVideo"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activitys.UserInfoActivity"
             android:screenOrientation="portrait" />

@@ -3,6 +3,7 @@ package com.damon.ropa.activitys;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.LinearSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -14,8 +15,11 @@ import android.widget.TextView;
 
 import com.damon.ropa.R;
 import com.damon.ropa.adapters.ImagesProductsAdapter;
+import com.damon.ropa.interfaces.VideoPlaying;
 import com.damon.ropa.models.ImagesList;
 import com.damon.ropa.models.ProductEntry;
+import com.damon.ropa.utils.SnapHelperOneByOne;
+import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -28,7 +32,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailsProduct extends AppCompatActivity {
+public class DetailsProduct extends AppCompatActivity implements VideoPlaying {
 
     ImageView edit_prod;
 
@@ -68,6 +72,9 @@ public class DetailsProduct extends AppCompatActivity {
         linearLayoutManager = new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,false);
         recyclerView.setLayoutManager(linearLayoutManager);
 
+        LinearSnapHelper snapHelper = new SnapHelperOneByOne();
+        snapHelper.attachToRecyclerView(recyclerView);
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null){
              productEntry =(ProductEntry) bundle.getSerializable("product");
@@ -78,7 +85,7 @@ public class DetailsProduct extends AppCompatActivity {
             cantidad.setText(""+productEntry.getCantidad());
             category.setText(productEntry.getCategory());
             getImages(productEntry.getCategory(),productEntry.getId());
-            imagesProductsAdapter = new ImagesProductsAdapter(imagesLists,this);
+            imagesProductsAdapter = new ImagesProductsAdapter(imagesLists,this,this::isPlaying);
             recyclerView.setAdapter(imagesProductsAdapter);
 
             btn_instagram.setOnClickListener(new View.OnClickListener() {
@@ -181,6 +188,17 @@ public class DetailsProduct extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        if (exoPlayer != null ){
+            exoPlayer.release();
+        }
         finish();
+    }
+
+    SimpleExoPlayer exoPlayer;
+    @Override
+    public void isPlaying(SimpleExoPlayer simpleExoPlayer, boolean isplaying) {
+        if (simpleExoPlayer != null ){
+          exoPlayer = simpleExoPlayer;
+        }
     }
 }
