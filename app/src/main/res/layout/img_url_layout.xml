@@ -68,7 +68,7 @@
             android:layout_height="50dp"
             android:src="@drawable/ic_delete"
             app:tint="@android:color/holo_red_dark"
-            android:layout_gravity="top"
+            android:layout_gravity="center_horizontal"
             android:layout_margin="10dp"
             />
 
