@@ -65,99 +65,105 @@ public class ImagesProductsAdapter extends RecyclerView.Adapter<ImagesUrl> {
         }else if (imagesUrl.getUrl().contains(".mp4")){
             holder.video_layout.setVisibility(View.VISIBLE);
             holder.delete_video.setVisibility(View.GONE);
+            holder.voice_off.setVisibility(View.GONE);
 //            holder.progressVideo.setVisibility(View.GONE);
 
-            try {
-                final MediaPlayer[] mediaPlayer = {null};
-
-
-                Executors.newSingleThreadExecutor().submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            holder.videoPath.setVideoPath(imagesUrl.getUrl());
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    holder.videoPath.setOnInfoListener(new MediaPlayer.OnInfoListener() {
-                        @Override
-                        public boolean onInfo(MediaPlayer mp, int what, int extra) {
-                            if (what == mp.MEDIA_INFO_BUFFERING_START){
-                                holder.progressVideo.setVisibility(View.VISIBLE);
-                            }else if (what == mp.MEDIA_INFO_BUFFERING_END){
-                                holder.progressVideo.setVisibility(View.GONE);
-                            }
-                            return false;
-                        }
-                    });
-                }
-
-
-
-                holder.videoPath.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                    @Override
-                    public void onPrepared(MediaPlayer mp) {
-                        mediaPlayer[0] = mp;
-                        mp.setVolume(0, 0);
-                        holder.progressVideo.setVisibility(View.GONE);
-                        mp.start();
-                        mp.setLooping(true);
-
-                        holder.time_duration.setVisibility(View.VISIBLE);
-
-                        holder.time_duration.setText(getTimeVideo(mp.getDuration()/1000));
-
-                        float videoRatio = mp.getVideoWidth() / (float) mp.getVideoHeight();
-                        float screenRatio = holder.videoPath.getWidth() / (float) holder.videoPath.getHeight();
-
-                        float scale = videoRatio / screenRatio;
-                        if (scale >= 1f) {
-                            holder.videoPath.setScaleX(scale);
-                        } else {
-                            holder.videoPath.setY(1f / scale);
-                        }
-                    }
-                });
-
-
-                final boolean[] isOffAuido = {true};
-                holder.voice_off.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        try {
-                            if (isOffAuido[0]) {
-                                if (mediaPlayer[0] != null) {
-                                    mediaPlayer[0].setVolume(0.5f, 0.5f);
-                                }
-                                holder.voice_off.setImageResource(R.drawable.ic_voice_on);
-                                isOffAuido[0] = false;
-                            } else {
-                                if (mediaPlayer[0] != null) {
-                                    mediaPlayer[0].setVolume(0, 0);
-                                }
-                                holder.voice_off.setImageResource(R.drawable.voice_off);
-                                isOffAuido[0] = true;
-                            }
-                        }catch (IllegalStateException e){
-                            e.printStackTrace();
-                        }
-
-
-                    }
-                });
-
-
-            }catch (Exception e){
-                e.printStackTrace();
-            }
+            //SetVideo(holder, imagesUrl);
+            holder.setVideo(activity.getApplication(),imagesLists.get(position).getUrl());
         }
 
 
+    }
+
+    private void SetVideo(@NonNull ImagesUrl holder, ImagesList imagesUrl) {
+        try {
+            final MediaPlayer[] mediaPlayer = {null};
+
+
+            Executors.newSingleThreadExecutor().submit(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        holder.videoPath.setVideoPath(imagesUrl.getUrl());
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                holder.videoPath.setOnInfoListener(new MediaPlayer.OnInfoListener() {
+                    @Override
+                    public boolean onInfo(MediaPlayer mp, int what, int extra) {
+                        if (what == mp.MEDIA_INFO_BUFFERING_START){
+                            holder.progressVideo.setVisibility(View.VISIBLE);
+                        }else if (what == mp.MEDIA_INFO_BUFFERING_END){
+                            holder.progressVideo.setVisibility(View.GONE);
+                        }
+                        return false;
+                    }
+                });
+            }
+
+
+
+            holder.videoPath.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    mediaPlayer[0] = mp;
+                    mp.setVolume(0, 0);
+                    holder.progressVideo.setVisibility(View.GONE);
+                    mp.start();
+                    mp.setLooping(true);
+
+                    holder.time_duration.setVisibility(View.VISIBLE);
+
+                    holder.time_duration.setText(getTimeVideo(mp.getDuration()/1000));
+
+                    float videoRatio = mp.getVideoWidth() / (float) mp.getVideoHeight();
+                    float screenRatio = holder.videoPath.getWidth() / (float) holder.videoPath.getHeight();
+
+                    float scale = videoRatio / screenRatio;
+                    if (scale >= 1f) {
+                        holder.videoPath.setScaleX(scale);
+                    } else {
+                        holder.videoPath.setY(1f / scale);
+                    }
+                }
+            });
+
+
+            final boolean[] isOffAuido = {true};
+            holder.voice_off.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    try {
+                        if (isOffAuido[0]) {
+                            if (mediaPlayer[0] != null) {
+                                mediaPlayer[0].setVolume(0.5f, 0.5f);
+                            }
+                            holder.voice_off.setImageResource(R.drawable.ic_voice_on);
+                            isOffAuido[0] = false;
+                        } else {
+                            if (mediaPlayer[0] != null) {
+                                mediaPlayer[0].setVolume(0, 0);
+                            }
+                            holder.voice_off.setImageResource(R.drawable.voice_off);
+                            isOffAuido[0] = true;
+                        }
+                    }catch (IllegalStateException e){
+                        e.printStackTrace();
+                    }
+
+
+                }
+            });
+
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 
     private String getTimeVideo(int seconds){
