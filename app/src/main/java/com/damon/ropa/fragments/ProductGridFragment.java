@@ -34,9 +34,11 @@ import android.widget.Toast;
 
 import com.damon.ropa.R;
 import com.damon.ropa.activitys.LoginActivity;
+import com.damon.ropa.activitys.MainActivity;
 import com.damon.ropa.adapters.StaggeredProductCardRecyclerViewAdapter;
 import com.damon.ropa.holder.ImagesUrl;
 import com.damon.ropa.interfaces.FiltrosI;
+import com.damon.ropa.interfaces.OnbackPresetFragment;
 import com.damon.ropa.models.ImagesList;
 import com.damon.ropa.models.ProductEntry;
 import com.damon.ropa.utils.CustomBottomSheet;
@@ -54,7 +56,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ProductGridFragment extends Fragment implements FiltrosI {
+public class ProductGridFragment extends Fragment implements FiltrosI, OnbackPresetFragment {
 
     DatabaseReference reference,queryRef;
     MaterialButton btn_mujer,btn_hombre,btn_cuenta,btn_mochila,btn_nino,btn_variedades;
@@ -71,6 +73,24 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
     private NestedScrollView scrollView;
     private Drawable openIcon;
     private Drawable closeIcon;
+
+    public static ProductGridFragment newInstance(Bundle argumentos){
+        ProductGridFragment productGridFragment = new ProductGridFragment();
+        if (productGridFragment !=null){
+            productGridFragment.setArguments(argumentos);
+        }
+        return productGridFragment;
+    }
+
+    public ProductGridFragment(){
+
+    }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -219,7 +239,7 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
     }
 
 
-    void   closeOrNoMenu(){
+    public void   closeOrNoMenu(){
         backdropShown = !backdropShown;
         animatorSet.removeAllListeners();
         animatorSet.end();
@@ -637,4 +657,11 @@ public class ProductGridFragment extends Fragment implements FiltrosI {
 //        return productEntryArrayList;
     }
 
+
+    @Override
+    public void onBackPreset(boolean ispresent) {
+        if (ispresent){
+            closeOrNoMenu();
+        }
+    }
 }

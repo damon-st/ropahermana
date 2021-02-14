@@ -1,15 +1,11 @@
 package com.damon.ropa.activitys;
 
+import android.content.Context;
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-
-import android.app.Application;
-import android.content.Context;
-import android.os.Build;
-import android.os.Bundle;
-import android.transition.Fade;
-import android.view.View;
 
 import com.damon.ropa.R;
 import com.damon.ropa.app.RopaAplication;
@@ -21,13 +17,17 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity implements NavigationHost {
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         FirebaseApp.initializeApp(RopaAplication.getAppContext());
 
-        if (savedInstanceState == null){
+
+
+       if (savedInstanceState == null){
             getSupportFragmentManager()
                     .beginTransaction()
                     .add(R.id.container,new ProductGridFragment())
@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationHost {
 //                getWindow().setExitTransition(fade);
 //            }
 //        }
+
 
     }
     /**
@@ -104,4 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationHost {
             return false;
         }
     }
+
+
+
 }

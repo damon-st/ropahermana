@@ -75,6 +75,13 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
             holder.expan_video.setOnClickListener(v -> {
                 holder.VideoActivity(activity,list.get(position));
             });
+
+            holder.delete_video.setOnClickListener(v -> {
+                list.remove(position);
+                notifyDataSetChanged();
+            });
+
+
         }
 
     }
