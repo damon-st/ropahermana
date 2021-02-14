@@ -52,6 +52,7 @@ public class ImagesUrl  extends RecyclerView.ViewHolder {
 
     public VideoPlaying videoPlaying;
 
+
     public ImagesUrl(@NonNull View itemView,VideoPlaying videoPlaying) {
         super(itemView);
         img_url = itemView.findViewById(R.id.img_url);
@@ -75,6 +76,8 @@ public class ImagesUrl  extends RecyclerView.ViewHolder {
 
         this.videoPlaying = videoPlaying;
     }
+
+
 
     public void releaseExo(){
         if (exoPlayer != null){
