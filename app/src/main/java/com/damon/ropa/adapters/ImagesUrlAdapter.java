@@ -47,8 +47,9 @@ public class ImagesUrlAdapter extends RecyclerView.Adapter<ImagesUrl> {
     public void onBindViewHolder(@NonNull ImagesUrl holder, int position) {
         holder.image_layout.setVisibility(View.GONE);
         holder.video_layout.setVisibility(View.GONE);
-        if (list.get(position).endsWith(".jpg")|| list.get(position).endsWith(".jpeg") |
-                list.get(position).endsWith(".png") || list.get(position).contains(".png")){
+        if (list.get(position).endsWith(".jpg")|| list.get(position).endsWith(".jpeg") ||
+                list.get(position).endsWith(".png") || list.get(position).contains(".png")
+        ||list.get(position).contains(".jpg")|| list.get(position).contains(".jpeg")){
             holder.image_layout.setVisibility(View.VISIBLE);
             Glide.with(activity).load(list.get(position)).into(holder.img_url);
             holder.delete_img.setOnClickListener(new View.OnClickListener() {

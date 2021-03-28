@@ -53,7 +53,7 @@ public class ImagesProductsAdapter extends RecyclerView.Adapter<ImagesUrl> {
         ImagesList imagesUrl = imagesLists.get(position);
 
 
-        if (imagesUrl.getUrl().contains(".png")){
+        if (imagesUrl.getUrl().contains(".png")||imagesUrl.getUrl().contains(".jpeg")||imagesUrl.getUrl().contains(".jpg")){
             holder.image_layout.setVisibility(View.VISIBLE);
             holder.delete_img.setVisibility(View.GONE);
             Picasso.get().load(imagesLists.get(position).getUrl()).into(holder.img_url);
